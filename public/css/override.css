@@ -1,0 +1,20 @@
+.form-horizontal label.myshortform {
+    width: 20px;
+    text-align: left;
+}
+
+.form-horizontal div.myshortform {
+    margin-left: 60px;
+}
+
+input.myshortinput {
+    width: 125px;
+}
+
+.myselect {
+    width: auto;
+}
+
+.mynomargins {
+    margin: 0 0 0 0;
+}

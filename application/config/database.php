@@ -80,7 +80,7 @@ return array(
 		'pgsql' => array(
 			'driver'   => 'pgsql',
 			'host'     => '127.0.0.1',
-			'database' => 'stjohn',
+			'database' => 'stjohns',
 			'username' => 'martin',
 			'password' => 'martin',
 			'charset'  => 'utf8',

@@ -15,16 +15,15 @@ class Create_People {
             // varchar 32
             $table->string('first_name', 64);
             $table->string('surname', 64);
-            $table->integer('priority');
-            $table->date('waiting_since');
-            $table->string('middle_names', 64)->nullable();
-            $table->string('email', 320)->nullable();
-            $table->string('cell_phone', 15)->nullable();
-            $table->string('work_phone', 15)->nullable();
-            $table->string('home_phone', 128)->nullable();
-            $table->string('address', 128)->nullable();
-            $table->string('id_number', 128)->nullable();
-            $table->string('passport_number', 128)->nullable();
+            $table->string('hospital_number', 64);
+            $table->integer('grade');
+            $table->string('date_booked', 20);
+            $table->string('date_of_birth', 20)->nullable();
+
+            $table->string('phone_1', 20)->nullable();
+            $table->string('phone_2', 20)->nullable();
+            $table->string('contact_history', 512)->nullable();
+            $table->boolean('short_notice')->nullable();
 
             // created_at | updated_at DATETIME
             $table->timestamps();

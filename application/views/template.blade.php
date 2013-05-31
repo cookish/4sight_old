@@ -20,8 +20,13 @@
             <a class="brand" href="#">St. John's Eye Clinic</a>
             <div class="nav-collapse collapse">
                 <ul class="nav">
-                    <li class="active"><a href="{{ URL::to('/') }}">Home</a></li>
-                    <li><a href="{{ URL::to('people/list') }}">Patients</a></li>
+
+                    <li class="{{ (URL::current() == URL::home()) ? 'active' : ''; }}"><a href="{{ URL::to('/') }}">Home</a></li>
+                    <li class="{{ (strpos(URL::current(),'people/add')) ? 'active' : ''; }}"><a href="{{ URL::to('people/add') }}">New</a></li>
+                    <li class="{{ (strpos(URL::current(),'people/list')) ? 'active' : ''; }}"><a href="{{ URL::to('people/list') }}">Patients</a></li>
+                    <li class="{{ (strpos(URL::current(),'appointments/create')) ? 'active' : ''; }}"><a href="{{ URL::to('appointments/create') }}">Appointments</a></li>
+                    <li class="{{ (strpos(URL::current(),'lists/')) ? 'active' : ''; }}"><a href="{{ URL::to('lists/pre-op') }}">Lists</a></li>
+
                     <li><a href="#contact">Contact</a></li>
                 </ul>
             </div>
@@ -33,7 +38,8 @@
             </div>
         </div>
     </div>
-    <script src="http://code.jquery.com/jquery.js"></script>
+<!--    <script src="http://code.jquery.com/jquery.js"></script>-->
+    <script src="/vendor/jquery/jquery.js"></script>
     <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
 </body>
 </html>

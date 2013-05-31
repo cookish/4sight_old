@@ -32,10 +32,15 @@
 |
 */
 
-// application/routes.php
 Route::controller('account');
-Route::any('people/(:num)', 'people@details');
+
+Route::get('people/(:num)', 'people@detailsGet');
+Route::post('people/(:num)', 'people@detailsPost');
+Route::post('people/add', 'people@addPost');
+Route::get('people/add', 'people@addGet');
 Route::controller('people');
+
+Route::controller('appointments');
 
 Route::get('/', function()
 {

@@ -6,44 +6,59 @@
 
 
 @section('content')
-
-    <h1>Patient list</h1>
-    <?php echo Form::open('people/list', 'GET', array('class' => 'form-search')); ?>
+<div class="row">
+    <div class="span6"><h1>Patient list</h1></div>
+    <div class="span6">
+        <br/>
+        <?php echo Form::open('people/list', 'GET', array('class' => 'form-search')); ?>
         <div class="input-append">
             <?php echo Form::text('search', null, array(
-                    'class' => 'span12 search-query',
-                    'style' => 'margin: 0 auto;',
-                    'data-provide' => 'typeahead',
-                    'data-items' => '4',
-                    'autocomplete' => 'off',
-                    'data-source' => '["' . implode($typeahead, '","')  . '"]')); ?>
+                'class' => 'span12 search-query',
+                'style' => 'margin: 0 auto;',
+                'data-provide' => 'typeahead',
+                'data-items' => '4',
+                'autocomplete' => 'off',
+                'data-source' => '["' . implode($typeahead, '","')  . '"]')); ?>
             <?php echo Form::submit('Search', array('class' => 'btn')); ?>
         </div>
-    <?php echo Form::close(); ?>
+        <?php echo Form::close(); ?>
+    </div>
+</div>
+<div class="row">
+    <div class="span12">
+        <p>&nbsp;</p>
+        <?php if (isset($search)) { ?>
+            <div class="span12 alert alert-info">Showing all results with first name, surname or Hospital number containing "<strong>{{ $search; }}</strong>"</div>
+        <?php } ?>
 
     <table class="table table-condensed table-striped table-hover">
         <thead>
             <tr>
                 <th>First name</th>
                 <th>Surname</th>
-                <th>ID number</th>
-                <th>Priority</th>
-                <th>Waiting since</th>
+                <th>Hospital number</th>
+                <th>Grade</th>
+                <th>Date booked</th>
             </tr>
         </thead>
         @foreach ($people as $person)
-            <?php $date = new DateTime($person->waiting_since); ?>
+            <?php $date = new DateTime($person->date_booked); ?>
             <tr id="{{ $person->id }}">
                 <td>{{ $person->first_name }}</td>
                 <td>{{ $person->surname }}</td>
-                <td>{{ $person->id_number }}</td>
-                <td>{{ $person->priority }}</td>
+                <td>{{ $person->hospital_number }}</td>
+                <td>{{ $person->grade }}</td>
                 <td>{{ $date->format('j M Y') }}</td>
             </tr>
         @endforeach
     </table>
 
-<script src="http://code.jquery.com/jquery.js"></script>
+<button class="btn btn-primary" type="button" onclick="location.href='{{ URL::to('people/add') }}'">Add patient</button>
+    </div>
+</div>
+
+<!--<script src="http://code.jquery.com/jquery.js"></script>-->
+<script src="/vendor/jquery/jquery.js"></script>
 <script>
     $(document).ready(function () {
         $('.table tr').click(function (event) {
@@ -52,7 +67,5 @@
         });
     });
 </script>
-
-
 
 @endsection

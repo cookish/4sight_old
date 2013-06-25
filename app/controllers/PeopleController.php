@@ -132,6 +132,7 @@ class PeopleController extends BaseController {
                 'saveText' => 'Save changes',
                 'formTarget' => null,
                 'formData' => Person::find($person_id),
+                'formInfo' => Person::$formInfo,
             ));
     }
 }

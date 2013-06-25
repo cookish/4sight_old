@@ -25,7 +25,7 @@ echo Navbar::inverse(null, Navbar::FIX_TOP)
                 array('Home', URL::to('/'), (URL::current() == URL::to('/'))),
                 array('New', URL::to('people/add'), (strpos(URL::current(),'people/add'))),
                 array('Patients', URL::to('people/list'), (strpos(URL::current(),'people/list'))),
-                array('Appointments', URL::to('lists/pre-op'), (strpos(URL::current(),'appointments/create'))),
+                array('Appointments', URL::to('appointments/create'), (strpos(URL::current(),'appointments/create'))),
             )
         )
     );

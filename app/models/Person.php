@@ -18,7 +18,7 @@ class Person extends Eloquent
         'phone_2' => array('type'=>'text', 'label' => 'Phone 2'),
         'contact_history' => array('type'=>'textarea', 'label' => 'Contact history'),
         'short_notice' => array('type'=>'dropdown', 'label' => 'Short notice',
-            'options' => array(true => 'Yes', false => 'No')),
+            'options' => array('yes' => 'Yes', 'no'=> 'No')),
         'cancellation_notes' => array('type'=>'textarea', 'label' => 'Cancellation notes')
     );
 
@@ -61,7 +61,7 @@ class Person extends Eloquent
             'grade' => 'integer|min:0|max:4',
             'date_booked' => 'required',
             'gender' => 'in:male,female,0',
-            'short_notice' => 'integer|min:0|max:1',
+            'short_notice' => 'in:yes,no,0',
         );
 
         return Validator::make($input, $rules);
@@ -72,7 +72,7 @@ class Person extends Eloquent
 
         foreach (Person::$formInfo as $field => $notUsed) {
             if (isset($input[$field])) {
-                $person->{$field} = (($input[$field]) ? $input[$field] : null);
+                $person->{$field} = (($input[$field] !== '') ? $input[$field] : null);
             }
         }
 

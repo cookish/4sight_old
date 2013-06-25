@@ -45,7 +45,7 @@ class CreateSurgeries extends Migration {
             $table->string('biometry_right', 256)->nullable();
             $table->string('histological_outcome_left', 256)->nullable();
             $table->string('histological_outcome_right', 256)->nullable();
-            $table->string('notes', 512)->nullable();
+            $table->string('surgery_notes', 512)->nullable();
 
             // created_at | updated_at DATETIME
             $table->timestamps();

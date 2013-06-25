@@ -16,7 +16,7 @@ class Surgery extends Eloquent
         'biometry_right',
         'histological_outcome_left',
         'histological_outcome_right',
-        'notes'
+        'surgery_notes'
     );
 
 

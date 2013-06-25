@@ -25,7 +25,7 @@ class CreatePeople extends Migration {
 
             $table->string('phone_1', 20)->nullable();
             $table->string('phone_2', 20)->nullable();
-            $table->boolean('short_notice')->nullable();
+            $table->string('short_notice', 3)->nullable();
             $table->string('contact_history', 512)->nullable();
             $table->string('cancellation_notes', 512)->nullable();
 

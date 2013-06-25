@@ -8,6 +8,9 @@ Patient list
 @section('content')
 <h1>New patient</h1>
 <p>&nbsp;</p>
+{{ Form::horizontal_open(null)}}
 {{ $person_form; }}
-<button class="btn" onclick="location.href='{{ URL::to('people/list') }}'">Cancel</button>
+<?php echo Form::actions(array(Button::primary_submit('Save changes'), Form::button('Cancel'))); ?>
+{{ Form::close(); }}
+
 @endsection

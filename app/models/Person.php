@@ -2,22 +2,28 @@
 
 class Person extends Eloquent
 {
-    public static $fieldList = array(
-        "column_name",
-        "id",
-        "first_name",
-        "surname",
-        "hospital_number",
-        "grade",
-        "date_booked",
-        "date_of_birth",
-        "phone_1",
-        "phone_2",
-        "contact_history",
-        "short_notice",
-        "created_at",
-        "updated_at"
+
+
+    public static $formInfo = array(
+        'first_name' => array('type'=>'text', 'label' => 'First name', 'required'=> true),
+        'surname' => array('type'=>'text', 'label' => 'Surname', 'required'=> true),
+        'hospital_number' => array('type'=>'text', 'label' => 'Hospital number', 'required'=> true),
+        'gender' => array('type'=>'dropdown', 'label' => 'Gender',
+            'options' => array('male' => 'Male','female' => 'Female')),
+        'grade' => array('type'=>'dropdown', 'label' => 'Grade',
+            'options' => array(1 => '1', 2 => '2', 3 => '3', 4 => '4')),
+        'date_booked' => array('type'=>'timestamp', 'label' => 'Date Booked', 'required'=> true),
+        'date_of_birth' => array('type'=>'timestamp', 'label' => 'Date of birth'),
+        'phone_1' => array('type'=>'text', 'label' => 'Phone 1'),
+        'phone_2' => array('type'=>'text', 'label' => 'Phone 2'),
+        'contact_history' => array('type'=>'textarea', 'label' => 'Contact history'),
+        'short_notice' => array('type'=>'dropdown', 'label' => 'Short notice',
+            'options' => array(true => 'Yes', false => 'No')),
+        'cancellation_notes' => array('type'=>'textarea', 'label' => 'Cancellation notes')
     );
+
+
+
 
     public function appointments() {
         return $this->hasMany('Appointment');
@@ -52,8 +58,10 @@ class Person extends Eloquent
             'first_name' => 'required',
             'surname' => 'required',
             'hospital_number' => 'required',
-            'grade' => 'required|integer|min:1|max:4',
-            'date_booked' => 'required'
+            'grade' => 'integer|min:0|max:4',
+            'date_booked' => 'required',
+            'gender' => 'in:male,female,0',
+            'short_notice' => 'integer|min:0|max:1',
         );
 
         return Validator::make($input, $rules);
@@ -62,7 +70,7 @@ class Person extends Eloquent
 
     public static function updateOrInsert($person, $input) {
 
-        foreach (Person::$fieldList as $field) {
+        foreach (Person::$formInfo as $field => $notUsed) {
             if (isset($input[$field])) {
                 $person->{$field} = (($input[$field]) ? $input[$field] : null);
             }

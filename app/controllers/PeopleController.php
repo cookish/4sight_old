@@ -11,6 +11,7 @@ class PeopleController extends BaseController {
         $v = Person::validate(Input::all());
         if ($v->passes()) {
 
+
             $person_id = Person::updateOrInsert(new Person, Input::all());
             return Redirect::to('people/' . $person_id)
                     ->with('alert_details', 'Patient created');
@@ -26,7 +27,10 @@ class PeopleController extends BaseController {
      */
     public function addGet() {
         return View::make('people_add')
-            ->nest('person_form', 'people_form', array('saveText' => 'Add patient', 'formTarget' => null));
+            ->nest('person_form', 'form_display', array(
+                'formInfo' => Person::$formInfo,
+                'formData' => array()
+            ));
     }
 
     public function listPeople() {
@@ -127,10 +131,10 @@ class PeopleController extends BaseController {
         return View::make('people_details')
             ->with('person', $person)
             ->with('surgery', $surgery)
-            ->nest('person_form', 'people_form', array(
+            ->nest('person_form', 'form_display', array(
                 'saveText' => 'Save changes',
                 'formTarget' => null,
-                'personData' => Person::find($person_id),
+                'formData' => Person::find($person_id),
             ));
     }
 }

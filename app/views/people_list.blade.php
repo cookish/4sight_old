@@ -63,7 +63,7 @@
     $(document).ready(function () {
         $('.table tr').click(function (event) {
             // alert($(this).attr('id')); //trying to alert id of the clicked row
-            window.location = '{{ URL::to('people/'); }}' + $(this).attr("id");
+            window.location = '{{ URL::to('people/'); }}' + '/' +  $(this).attr("id");
         });
     });
 </script>

@@ -11,7 +11,6 @@ class DatabaseSeeder extends Seeder {
 	{
 		Eloquent::unguard();
 
-
 		$this->call('PeopleTableSeeder');
         $this->command->info('People table seeded!');
     }
@@ -31,7 +30,7 @@ class PeopleTableSeeder extends Seeder {
         $date_booked = array('21 June 2012', '23 July 2012', '3 May 2012', '29 December 2012', '23 April 2013',
             '16 June 2015', '2 Feb 2014');
         foreach ($firstnames as $key=>$name) {
-            People::create(array('firstname' => $firstnames[$key], 'surname' => $surnames[$key],
+            Person::create(array('first_name' => $firstnames[$key], 'surname' => $surnames[$key],
                 'hospital_number' => $hospitalnumbers[$key], 'grade' => $grades[$key],
                 'date_booked' => $date_booked[$key]));
         }

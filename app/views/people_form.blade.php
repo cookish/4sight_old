@@ -1,7 +1,7 @@
 <?php
-echo Form::open(array('url' => $formTarget, 'method' => 'POST', 'class' => 'form-horizontal'));
-if (!isset($personData)) {
-    $personData = array();
+echo Form::horizontal_open($formTarget);
+if (!isset($formData)) {
+    $formData = array();
 }
 $fields = array(
     'first_name' => 'First Name',
@@ -28,14 +28,23 @@ $dates = array(
     'date_of_birth'
 );
 
+echo Form::control_group(Form::label('first_name', 'First Name', array('class'=>'required')),
+    Form::xlarge_text('first_name'),'',
+    '<span class="text-error"> '. $errors->first('first_name') . '</span>'
+    );
+
 ?>
 
+
+
 @foreach ($fields as $field_name => $field_label)
+
+
 
 <div class="control-group">
     <?php
     $requiredStyle = in_array($field_name, $required) ? 'required' : '';
-    $value = (isset($personData->{$field_name}) ? $personData->{$field_name} : null);
+    $value = (isset($formData->{$field_name}) ? $formData->{$field_name} : null);
     if (isset($value) && in_array($field_name, $dates)) {
         $date = new DateTime($value);
         $value = $date->format('j F Y');

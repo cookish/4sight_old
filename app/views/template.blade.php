@@ -1,3 +1,7 @@
+<?php
+//Asset::container('bootstrapper')->styles();
+//Asset::container('bootstrapper')->scripts();
+?>
 <!DOCTYPE HTML>
 <html lang="en-GB">
 <head>
@@ -12,24 +16,21 @@
 
 </head>
 <body>
-<div class="navbar navbar-inverse navbar-fixed-top"><div class="navbar-inner"><div class="container"><button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="brand" href="#">St. John's Eye Clinic</a>
-            <div class="nav-collapse collapse">
-                <ul class="nav">
-                    <li class="{{ (URL::current() == URL::to('/')) ? 'active' : ''; }}"><a href="{{ URL::to('/') }}">Home</a></li>
-                    <li class="{{ (strpos(URL::current(),'people/add')) ? 'active' : ''; }}"><a href="{{ URL::to('people/add') }}">New</a></li>
-                    <li class="{{ (strpos(URL::current(),'people/list')) ? 'active' : ''; }}"><a href="{{ URL::to('people/list') }}">Patients</a></li>
-                    <li class="{{ (strpos(URL::current(),'appointments/create')) ? 'active' : ''; }}"><a href="{{ URL::to('appointments/create') }}">Appointments</a></li>
-                    <li class="{{ (strpos(URL::current(),'lists/')) ? 'active' : ''; }}"><a href="{{ URL::to('lists/pre-op') }}">Lists</a></li>
+<?php
+echo Navbar::inverse(null, Navbar::FIX_TOP)
+    ->with_brand("St. John's Eye Clinic", '#')
+    ->with_menus(
+        Navigation::links(
+            array(
+                array('Home', URL::to('/'), (URL::current() == URL::to('/'))),
+                array('New', URL::to('people/add'), (strpos(URL::current(),'people/add'))),
+                array('Patients', URL::to('people/list'), (strpos(URL::current(),'people/list'))),
+                array('Appointments', URL::to('lists/pre-op'), (strpos(URL::current(),'appointments/create'))),
+            )
+        )
+    );
+?>
 
-                    <li><a href="#contact">Contact</a></li>
-                </ul>
-            </div>
-        </div></div></div>
     <div class="container">
         <div class="row-fluid">
             <div class="span10">

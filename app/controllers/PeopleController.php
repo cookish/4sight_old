@@ -35,9 +35,6 @@ class PeopleController extends BaseController {
 
     public function listPeople() {
 
-//        var_dump(Person::all());
-//        die('moo');
-
         //if the user has entered a search term
         $search = Input::all('search');
         if (array_key_exists('search', $search)) {
@@ -75,7 +72,7 @@ class PeopleController extends BaseController {
             $v = Person::validate(Input::all());
             if ($v->passes()) {
                 Person::updateOrInsert(Person::find($person_id), Input::all());
-                return Redirect::to('people/' . $person_id)
+                return Redirect::to('people/'. $person_id)
                     ->with('alert_details', 'Details saved');
             } else {
                 return Redirect::to('people/' . $person_id)->withInput()->withErrors($v);
@@ -97,7 +94,7 @@ class PeopleController extends BaseController {
             $v = Appointment::validate($input);
             if ($v->passes()) {
                 Appointment::updateOrInsert(Appointment::find($input['appointmentSave']), $input);
-                return Redirect::to('people/' . $person_id);
+                return Redirect::to('people/'. $person_id);
             } else {
                 return Redirect::to('people/' . $person_id)->withInput()->withErrors($v);
             }

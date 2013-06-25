@@ -11,12 +11,18 @@ Patient details
 
 <div class="tabbable">
   <ul class="nav nav-tabs">
-    <li class="active"><a href="#tab1" data-toggle="tab">Patient details</a></li>
-    <li><a href="#tab2" data-toggle="tab">Surgery details</a></li>
-    <li><a href="#tab3" data-toggle="tab">Appointments</a></li>
+    <?php
+    $section = 'details';
+    if (Input::old('surgerySave')) $section = 'surgery';
+    elseif (Input::old('appointmentSave')) $section = 'appointments';
+    echo 'section: ' . $section;
+    ?>
+    <li {{ ($section == 'details') ? 'class="active"' : ''}}><a href="#tab1" data-toggle="tab">Patient details</a></li>
+    <li {{ ($section == 'surgery') ? 'class="active"' : ''}}><a href="#tab2" data-toggle="tab">Surgery details</a></li>
+    <li {{ ($section == 'appointments') ? 'class="active"' : ''}}><a href="#tab3" data-toggle="tab">Appointments</a></li>
   </ul>
   <div class="tab-content">
-    <div class="tab-pane active" id="tab1">
+    <div class="tab-pane {{ ($section == 'details') ? 'active' : '' }}" id="tab1">
             <div class="well">
                 <?php if (Session::get('alert_details')) { ?>
                     <div class="span12 alert alert-success">{{ Session::get('alert_details'); }}</div>
@@ -24,15 +30,17 @@ Patient details
                 {{ Form::horizontal_open(null)}}
                 <h3>Patient details</h3>
                 {{ $person_form; }}
-                <?php echo Form::actions(array(Button::primary_submit('Save changes'), Form::button('Cancel'))); ?>
+                <?php echo Form::actions(array(Button::primary_submit('Save changes', array('name'=>'save')), Form::button('Cancel'))); ?>
+                {{ Form::close() }}
             </div>
     </div>
-    <div class="tab-pane" id="tab2">
+    <div class="tab-pane {{ ($section == 'surgery') ? 'active' : ''}}" id="tab2">
         <div class="well">
-            <h3>Surgery details</h3>
             <?php if (Session::get('alert_surgery')) { ?>
-                <div class="span12 alert alert-success">{{ Session::get('alert_surgery'); }}</div>
+                <div class="alert alert-success">{{ Session::get('alert_surgery'); }}</div>
             <?php } ?>
+            <h3>Surgery details</h3>
+
             <?php echo Form::open(array('class' => 'form-horizontal')); ?>
             <!--date-->
             <div class="control-group">
@@ -97,55 +105,62 @@ Patient details
             </div><span class="text-error">{{ $errors->first('histological_outcome_right') }}</span>
 
             <div class= "control-group">
-                <?php echo Form::submit("Save changes", array('name' => 'surgerySave', 'class' => 'btn btn-primary'));?><br />
+                <?php echo Form::submit("Save changes", array('name' => 'surgerySave', 'value' => 'save', 'class' => 'btn btn-primary'));?><br />
             </div><div class= "control-group">
                 <?php echo Form::submit("Mark surgery as completed", array('name' => 'surgeryComplete', 'class' => 'btn btn-success'));?>
             </div>
+            {{ Form::close() }}
         </div> <!-- end well -->
     </div> <!-- end tab 2 -->
 
 
-    <div class="tab-pane active" id="tab3">
+    <div class="tab-pane {{ ($section == 'appointments') ? 'active' : ''}}" id="tab3">
 
         <h3>Appointments</h3>
-        <div class="accordion" id="accordion_appointments">
-            @foreach ($person->appointments as $appointment)
-            <?php print_r($appointment->appointmenttypes); ?>
-            <div class="accordion-group">
 
-                <div class="accordion-heading">
-                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion_appointments" href="#collapse{{ $appointment->id}}">
-                        <?php $date = new DateTime($appointment->date); ?>
-                        {{ $appointment->appointmenttype->name; }} - {{ $date->format('j F Y'); }}
-                    </a>
-                </div>
-                <div id="collapse{{ $appointment->id; }}" class="accordion-body collapse">
-                    <div class="accordion-inner">
-                        <?php echo Form::open(array('class' => 'form-horizontal')); ?>
+        @foreach ($person->appointments as $appointment)
 
-                        <div class="control-group span6">
+        <?php
+        //whether this appointment was just saved
+        $savedApp = (Input::old('appointmentSave') == $appointment->id)
+        ?>
+        <div class="well">
+            <?php
+            echo Form::open();
+            $temp = ($savedApp) ? Input::old('date',$appointment->date) : $appointment->date;
+            $date = '';
+            if ($temp) {
+                $date = new DateTime($temp);
+                $date = $date->format('j F Y');
+            }
+            $appointtypeidToDisplay = ($savedApp) ? Input::old('appointmenttype_id', $appointment->appointmenttype_id) : $appointment->appointmenttype_id;
+            ?>
 
-                            <select class="myselect" name="appointmenttype_id">
-                                @foreach (DB::table('appointmenttypes')->get(array('id', 'name')) as $apptype)
-                                <option value="{{ $apptype->id; }}" <?php if ($appointment->appointmenttype_id == $apptype->id) echo 'selected = "selected"'; ?>>{{ $apptype->name; }}</option>
-                                @endforeach
+            <select class="myselect" name="appointmenttype_id">
+                @foreach (DB::table('appointmenttypes')->lists('name', 'id') as $id => $name)
+                    <option value="{{ $id }}" {{ ($id == $appointtypeidToDisplay) ? 'selected = "selected"' : ''}} >{{ $name }}</option>
+                @endforeach
+            </select>
+            <?php
 
-                            </select>
-                        </div>
+            //echo Form::select('appointmenttype_id', DB::table('appointmenttypes')->lists('name', 'id'), $appointment->appointmenttype_id, array('class'=>'myselect'));
 
-                        <div class="control-group span6 text-right"><input class="myshortinput" name="date" type="text" value="{{ $date->format('j F Y'); }}"/></div>
+            echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+            echo '<input class="input-medium" name="date" type="text" value="' . $date .'" id="date">';
+//            echo Form::medium_text('date', $date->format('j F Y'),'');
+//            print_r($errors);
+            if (Input::old('appointmentSave') == $appointment->id) {
+                echo '<span class="text-error"> '. $errors->first("date") . '</span>';
+            }
+            ?>
 
+                <div class="control-group"><textarea class="span12" rows="4" name="notes">{{ $appointment->notes; }}</textarea></div>
+                <button class="btn btn-primary" name="appointmentSave" value="{{ $appointment->id; }}">Save</button>
+                <button class="btn" name="appointmentDelete" value="{{ $appointment->id; }}"><i class="icon-search icon-trash"></i> Delete</button>
+                <?php echo Form::close();?>
+            </div> <!-- end well -->
+        @endforeach
 
-                        <div class="control-group"><textarea class="span12" rows="4" name="notes">{{ $appointment->notes; }}</textarea></div>
-                        <button class="btn btn-primary" name="appointmentSave" value="{{ $appointment->id; }}">Save</button>
-                        <button class="btn" name="appointmentDelete" value="{{ $appointment->id; }}"><i class="icon-search icon-trash"></i> Delete</button>
-                        <?php echo Form::close();?>
-                    </div>
-                </div>
-
-            </div>
-            @endforeach
-        </div>   <!-- end accordion -->
 
         <!-- Button to trigger modal -->
         <a href="#myModal" role="button" class="btn" data-toggle="modal">Add appointment</a>
@@ -176,35 +191,17 @@ Patient details
 
 
 
-            </div>
+            </div> <!-- end modal body -->
             <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
                 <button class="btn btn-primary" name="appointmentAdd">Save changes</button>
             </div>
             <?php echo Form::close();?>
-        </div>
-    </div>
+        </div> <!-- end modal -->
 
-        <?php echo Form::close();?>
     </div> <!-- end tab 3 -->
 
-
-
-
-
-
-  </div>
-</div>
-
-
-
-
-
-
-
-
-
-
+  </div> <!-- end tab content>
 
 <!--    <script src="http://code.jquery.com/jquery.js"></script>-->
     <script src="/vendor/jquery/jquery.js"></script>

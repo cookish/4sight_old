@@ -2,6 +2,24 @@
 
 class Surgery extends Eloquent
 {
+
+    public static $formFields = array(
+        'surgerytype_id',
+        'date',
+        'completed',
+        'eyes',
+        'pre_op_va_left',
+        'pre_op_va_right',
+        'post_op_va_right',
+        'post_op_va_left',
+        'biometry_left',
+        'biometry_right',
+        'histological_outcome_left',
+        'histological_outcome_right',
+        'notes'
+    );
+
+
     public function person() {
         return $this->belongsTo('Person');
     }
@@ -24,12 +42,12 @@ class Surgery extends Eloquent
                 if ($surgeryType->group == '1' && ($input['eyes'] == 'L' || $input['eyes'] == 'L&R')) {
                     $rules['pre_op_va_left'] = 'required';
                     $rules['post_op_va_left'] = 'required';
-                    $rules['biometry_left'] .= 'required';
+                    $rules['biometry_left'] .= '|required';
                 }
                 if ($surgeryType->group == '1' && ($input['eyes'] == 'R' || $input['eyes'] == 'L&R')) {
                     $rules['pre_op_va_right'] = 'required';
                     $rules['post_op_va_right'] = 'required';
-                    $rules['biometry_right'] .= 'required';
+                    $rules['biometry_right'] .= '|required';
                 }
                 if ($surgeryType->group == '2' && ($input['eyes'] == 'L' || $input['eyes'] == 'L&R')) {
                     $rules['histological_outcome_left'] = 'required';
@@ -57,9 +75,9 @@ class Surgery extends Eloquent
         if (!$surgery) {
             $surgery = new Surgery();
         }
-        foreach ($input as $key => $value) {
-            if ($key != 'surgerySave' && $key != 'surgeryComplete') {
-                $surgery->{$key} = (($value) ? $value : null);
+        foreach (Surgery::$formFields as $field) {
+            if (isset($input[$field])) {
+                $surgery->{$field} = (($input[$field]) ? $input[$field] : null);
             }
         }
         if (isset($input['surgeryComplete'])) {

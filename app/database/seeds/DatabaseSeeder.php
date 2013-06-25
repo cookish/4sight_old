@@ -35,6 +35,21 @@ class PeopleTableSeeder extends Seeder {
                 'date_booked' => $date_booked[$key]));
         }
 
+        DB::table('appointmenttypes')->delete();
+        Appointmenttype::create(array('name' => 'Pre-op'));
+        Appointmenttype::create(array('name' => 'Post-op'));
+
+        DB::table('surgerytypes')->delete();
+        Surgerytype::create(array('name'=>'P+I', "group"=>1));
+        Surgerytype::create(array('name'=>'E+I', "group"=>1));
+        Surgerytype::create(array('name'=>'Secondary IOL', "group"=> 1));
+        Surgerytype::create(array('name'=>'Other Intra-ocular Procedures', "group"=>null));
+        Surgerytype::create(array('name'=>'Strab', "group"=>null));
+        Surgerytype::create(array('name'=>'Trab' , "group"=>null));
+        Surgerytype::create(array('name'=>'Conj Mass Excision', "group"=>2));
+        Surgerytype::create(array('name'=>'Other Extra-ocular Procedures', "group"=>2));
+
+
     }
 
 }

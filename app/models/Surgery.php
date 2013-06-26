@@ -8,6 +8,7 @@ class Surgery extends Eloquent
         'date',
         'completed',
         'eyes',
+        'ward',
         'pre_op_va_left',
         'pre_op_va_right',
         'post_op_va_right',
@@ -34,7 +35,7 @@ class Surgery extends Eloquent
             'surgerytype_id' => 'required',
             'date' => 'required',
             'biometry_left' => 'numeric',
-            'biometry_right' => 'numeric'
+            'biometry_right' => 'numeric',
         );
         if (isset($input['surgerytype_id']) && isset($input['eyes'])) {
             if ($input['surgerytype_id']) {

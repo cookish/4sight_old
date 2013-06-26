@@ -40,78 +40,87 @@ Patient details
             <?php } ?>
             <h3>Surgical details</h3>
 
-            <?php echo Form::open(array('class' => 'form-horizontal')); ?>
-            <!--date-->
-            <div class="control-group">
-                <?php echo Form::label('date', 'Date:', array('class' => 'control-label myshortform')); ?>
-                <div class="controls myshortform">
-                    <?php echo Form::text('date', Input::old('date', $surgery->date)); ?>
-                </div>
-                <span class="text-error">{{ $errors->first('date') }}</span>
-            </div>
+            <?php
+            echo Form::open(array('class' => 'form-horizontal'));
 
-            <!--surgerytype_id-->
-            <div class="control-group">
-                <?php echo Form::label('surgerytype_id', 'Type:', array('class' => 'control-label myshortform')); ?>
-                <div class="controls myshortform">
-                    <?php echo Form::select('surgerytype_id', array(''=>'') + DB::table('surgerytypes')->lists('name','id'), Input::old('surgerytype_id',$surgery->surgerytype_id), array('class'=>"myselect")); ?>
-                </div>
-                <span class="text-error">{{ $errors->first('surgerytype_id'); }}</span>
-            </div>
+            // date
+            echo Form::control_group(Form::label('date', 'Date:'),
+                Form::text('date', $surgery->date), '',
+                '<span class="text-error"> ' . $errors->first('date') . '</span>');
 
-            <!--eyes-->
-            <div class="control-group">
-                <?php echo Form::label('eyes', 'Eye:', array('class' => 'control-label myshortform')); ?>
-                <div class="controls myshortform">
-                    <?php $eyes = array('L'=>'L', 'R'=>'R', 'L&R'=>'L&R'); ?>
-                    <?php echo Form::select('eyes', array('' => '') + $eyes, Input::old('eyes', $surgery->eyes), array('class'=>"myselect")); ?>
-                </div>
-                <span class="text-error">{{ $errors->first('eyes') }}</span>
-            </div>
+            // surgerytype_id
+            echo Form::control_group(Form::label('surgerytype_id', 'Type:'),
+                Form::select('surgerytype_id', array(''=>'') + DB::table('surgerytypes')->lists('name','id'), $surgery->surgerytype_id, array('class'=>"myselect")), '',
+                '<span class="text-error"> '.$errors->first('surgerytype_id').'</span>');
 
-            <div class="eye_left group1 control-group"><?php echo Form::label('pre_op_va_left', 'Pre-operative VA left:'); ?>
-                <?php echo Form::textarea('pre_op_va_left', Input::old('pre_op_va_left', $surgery->pre_op_va_left), array('rows'=>2, 'class' => 'span12')); ?>
-            </div><span class="text-error">{{ $errors->first('pre_op_va_left') }}</span>
+            // eyes
+            $eyes = array('L'=>'L', 'R'=>'R', 'L&R'=>'L&R');
+            echo Form::control_group(Form::label('eyes', 'Eye:', array('class' => 'control-label')),
+                Form::select('eyes', array('' => '') + $eyes, $surgery->eyes, array('class'=>"myselect")),'',
+                '<span class="text-error"> '.$errors->first('eyes').'</span>');
 
-            <div class="eye_right group1 control-group" id="pre_op_va_right"><?php echo Form::label('pre_op_va_right', 'Pre-operative VA right:'); ?>
-                <?php echo Form::textarea('pre_op_va_right', Input::old('pre_op_va_right', $surgery->pre_op_va_right), array('rows'=>2, 'class' => 'span12')); ?>
-            </div><span class="text-error">{{ $errors->first('pre_op_va_right') }}</span>
+            //ward
+            echo Form::control_group(Form::label('ward', 'Ward:'),
+                Form::textbox('ward', $surgery->ward), '',
+                '<span class="text-error">' . $errors->first('ward') . '</span>');
+
+            // Pre-operative VA left
+            echo Form::control_group(Form::label('pre_op_va_left', 'Pre-operative VA left:'),
+                Form::textarea('pre_op_va_left', $surgery->pre_op_va_left, array('rows'=>2, 'class' => 'span12')), 'eye_left group1',
+            '<span class="text-error"> '.$errors->first('pre_op_va_left').'</span>');
+
+            // Pre-operative VA right
+            echo Form::control_group(Form::label('pre_op_va_right', 'Pre-operative VA right:'),
+                Form::textarea('pre_op_va_right', $surgery->pre_op_va_right, array('rows'=>2, 'class' => 'span12')), 'eye_right group1',
+                '<span class="text-error"> '.$errors->first('pre_op_va_right').'</span>');
+
+            // Post-operative VA left
+            echo Form::control_group(Form::label('post_op_va_left', 'Post-operative VA left:'),
+                Form::textarea('post_op_va_left', $surgery->post_op_va_left, array('rows'=>2, 'class' => 'span12')), 'eye_left group1',
+                '<span class="text-error"> '.$errors->first('post_op_va_left').'</span>');
+
+            // Post-operative VA right
+            echo Form::control_group(Form::label('post_op_va_right', 'Post-operative VA right:'),
+                Form::textarea('post_op_va_right', $surgery->post_op_va_right, array('rows'=>2, 'class' => 'span12')), 'eye_right group1',
+                '<span class="text-error"> '.$errors->first('post_op_va_right').'</span>');
+
+            // biometry left
+            echo Form::control_group(Form::label('biometry_left', 'Biometry left:'),
+                Form::text('biometry_left', $surgery->biometry_left),
+                'eye_left group1',
+                '<span class="text-error"> '.$errors->first('biometry_left').'</span>');
+
+            // biometry right
+            echo Form::control_group(Form::label('biometry_right', 'Biometry right:'),
+                Form::text('biometry_right', $surgery->biometry_right),
+                'eye_right group1',
+                '<span class="text-error"> '.$errors->first('biometry_right').'</span>');
+
+            // hist. outcome left
+            echo Form::control_group(Form::label('histological_outcome_left', 'Histological outcome left:'),
+                Form::textarea('histological_outcome_left', $surgery->histological_outcome_left, array('rows'=>4, 'class' => 'span12')),
+                'eye_left group2',
+                '<span class="text-error"> '.$errors->first('histological_outcome_left').'</span>');
+
+            // hist. outcome right
+            echo Form::control_group(Form::label('histological_outcome_right', 'Histological outcome right:'),
+                Form::textarea('histological_outcome_right', $surgery->histological_outcome_right, array('rows'=>4, 'class' => 'span12')),
+                'eye_right group2',
+                '<span class="text-error"> '.$errors->first('histological_outcome_right').'</span>');
+
+            // surgery notes
+            echo Form::control_group(Form::label('surgery_notes', 'Surgery notes:'),
+                Form::textarea('surgery_notes', $surgery->surgery_notes, array('rows'=>4, 'class'=>'span12')), '',
+                '<span class="text-error">' . $errors->first('ward') . '</span>');?>
 
 
-            <div class="eye_left group1 control-group" id="post_op_va_left"><?php echo Form::label('post_op_va_left', 'Post operative VA left:'); ?>
-                <?php echo Form::textarea('post_op_va_left', Input::old('post_op_va_left', $surgery->post_op_va_left), array('rows'=>2, 'class' => 'span12')); ?>
-            </div><span class="text-error">{{ $errors->first('post_op_va_left') }}</span>
+            <div class="controls"><?php echo Form::submit("Mark surgery as completed", array('name' => 'surgeryComplete', 'class' => 'btn btn-success')); ?></div>
 
+            <?php echo Form::actions(array(
+                Button::primary_submit('Save changes', array('name'=>'surgerySave', 'value'=>'save'))
 
-            <div class="eye_right group1 control-group" id="post_op_va_right"><?php echo Form::label('post_op_va_right', 'Post operative VA right:'); ?>
-                <?php echo Form::textarea('post_op_va_right', Input::old('post_op_va_right', $surgery->post_op_va_right), array('rows'=>2, 'class' => 'span12')); ?>
-            </div><span class="text-error">{{ $errors->first('post_op_va_right') }}</span>
+            )); ?>
 
-            <div class="eye_left group1 control-group" id="biometry_left"><?php echo Form::label('biometry_left', 'Biometry left:'); ?>
-                <?php echo Form::text('biometry_left', Input::old('biometry_left', $surgery->biometry_left)); ?>
-            </div><span class="text-error">{{ $errors->first('biometry_left') }}</span>
-
-            <div class="eye_right group1 control-group" id="biometry_right"><?php echo Form::label('biometry_right', 'Biometry right:'); ?>
-                <?php echo Form::text('biometry_right', Input::old('biometry_right', $surgery->biometry_right)); ?>
-            </div><span class="text-error">{{ $errors->first('biometry_right') }}</span>
-
-            <div class="eye_left group2 control-group" id="histological_outcome_left"><?php echo Form::label('histological_outcome_left', 'Histological outcome left:'); ?>
-                <?php echo Form::textarea('histological_outcome_left', Input::old('histological_outcome_left', $surgery->histological_outcome_left), array('rows'=>4, 'class' => 'span12')); ?>
-            </div><span class="text-error">{{ $errors->first('histological_outcome_left') }}</span>
-
-            <div class="eye_right group2 control-group" id="histological_outcome_right"><?php echo Form::label('histological_outcome_right', 'Histological outcome right:'); ?>
-                <?php echo Form::textarea('histological_outcome_right', Input::old('histological_outcome_right', $surgery->histological_outcome_right), array('rows'=>4, 'class' => 'span12')); ?>
-            </div><span class="text-error">{{ $errors->first('histological_outcome_right') }}</span>
-
-            <?php echo Form::label('surgery_notes', 'Surgery notes:') ?>
-            <?php echo Form::textarea('surgery_notes', $surgery->surgery_notes, array('rows'=>4, 'class'=>'span12')); ?>
-            <br/><br/>
-
-            <div class= "control-group">
-                <?php echo Form::submit("Save changes", array('name' => 'surgerySave', 'value' => 'save', 'class' => 'btn btn-primary'));?><br />
-            </div><div class= "control-group">
-                <?php echo Form::submit("Mark surgery as completed", array('name' => 'surgeryComplete', 'class' => 'btn btn-success'));?>
-            </div>
             {{ Form::close() }}
         </div> <!-- end well -->
     </div> <!-- end tab 2 -->

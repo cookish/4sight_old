@@ -85,6 +85,7 @@ class Surgery extends Eloquent
 
         //create a new surgery if none exists
         $surgery_id = false;
+        $surgery = null;
         if (isset($input['surgerySave'])) $surgery_id = $input['surgerySave'];
         elseif (isset($input['surgeryComplete'])) $surgery_id = $input['surgeryComplete'];
         if ($surgery_id) $surgery = Surgery::find($surgery_id);

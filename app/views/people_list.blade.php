@@ -25,11 +25,18 @@
     </div>
 </div>
 <div class="row">
+    <?php if (isset($search)) { ?>
+        <div class="span12 alert alert-info">
+            Showing all results with first name, surname or Hospital number containing "
+            <strong>{{ $search; }}</strong>"</div>
+    <?php } ?>
+</div>
+
+<div class="row">
     <div class="span12">
-        <p>&nbsp;</p>
-        <?php if (isset($search)) { ?>
-            <div class="span12 alert alert-info">Showing all results with first name, surname or Hospital number containing "<strong>{{ $search; }}</strong>"</div>
-        <?php } ?>
+
+
+
 
     <table class="table table-condensed table-striped table-hover">
         <thead>

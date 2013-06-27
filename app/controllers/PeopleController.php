@@ -51,7 +51,7 @@ class PeopleController extends BaseController {
             $typeahead[] = $person->surname;
             $typeahead[] = $person->hospital_number;
         }
-
+        $typeahead = array_unique($typeahead);
         $orderby = array(array('surname', 'asc'), array('first_name', 'asc'));
         $view = View::make('people_list')
             ->with('people', Person::personSearch($search, $orderby)->paginate(20))

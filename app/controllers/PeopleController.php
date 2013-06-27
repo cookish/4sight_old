@@ -10,11 +10,16 @@ class PeopleController extends BaseController {
     public function addPost() {
         $v = Person::validate(Input::all());
         if ($v->passes()) {
-
-
-            $person_id = Person::updateOrInsert(new Person, Input::all());
-            return Redirect::to('people/' . $person_id)
-                    ->with('alert_details', 'Patient created');
+            // a new surgery is created also...
+            $u = Surgery::validate(Input::all());
+            if ($u->passes()) {
+                $person_id = Person::updateOrInsert(new Person, Input::all());
+                Surgery::updateSurgery($person_id, Input::all());
+                return Redirect::to('people/' . $person_id)
+                        ->with('alert_details', 'Patient created');
+            } else {
+                return Redirect::to('people/add')->withInput()->withErrors($u);
+            }
         } else {
             return Redirect::to('people/add')->withInput()->withErrors($v);
         }
@@ -26,11 +31,12 @@ class PeopleController extends BaseController {
      * @return mixed
      */
     public function addGet() {
-        return View::make('people_add')
-            ->nest('person_form', 'form_display', array(
-                'formInfo' => Person::$formInfo,
-                'formData' => array()
-            ));
+        return View::make('people_add');
+
+//            ->nest('person_form', 'form_display', array(
+//                'formInfo' => Person::$formInfo,
+//                'formData' => array()
+//            ));
     }
 
     public function listPeople() {
@@ -132,12 +138,12 @@ class PeopleController extends BaseController {
         return View::make('people_details')
             ->with('person', $person)
             ->with('surgery', $surgery)
-            ->with('past_surgeries', $past_surgeries)
-            ->nest('person_form', 'form_display', array(
-                'saveText' => 'Save changes',
-                'formTarget' => null,
-                'formData' => Person::find($person_id),
-                'formInfo' => Person::$formInfo));
+            ->with('past_surgeries', $past_surgeries);
+//            ->nest('person_form', 'form_display', array(
+//                'saveText' => 'Save changes',
+//                'formTarget' => null,
+//                'formData' => Person::find($person_id),
+//                'formInfo' => Person::$formInfo));
 //            ->nest('surgery_form', 'surgery_form', array(
 //                'surgery' => $surgery)) ;
     }

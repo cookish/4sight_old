@@ -38,9 +38,7 @@ class Surgery extends Eloquent
 
     public static function validate($input) {
         $rules = array(
-            'eyes' => 'required',
             'surgerytype_id' => 'required',
-            'date' => 'required',
             'biometry_left' => 'numeric',
             'biometry_right' => 'numeric',
             'outcome' => 'in:' . implode(',',array_keys(Surgery::$outcomes))

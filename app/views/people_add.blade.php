@@ -10,7 +10,12 @@ Patient list
 <p>&nbsp;</p>
 <div class="well">
 {{ Form::horizontal_open(null)}}
-{{ $person_form; }}
+{{ View::make('form_display')
+    ->with('formData', array())
+    ->with('formInfo',
+        array('surgerytype_id' => array('type'=>'dropdown', 'label' => 'Surgery type', 'required'=> true,
+        'options' => DB::table('surgerytypes')->lists('name','id')))
+    + Person::$formInfo) }}
 <?php echo Form::actions(array(Button::primary_submit('Save changes'), Button::link('people/list', 'Cancel'))); ?>
 {{ Form::close(); }}
 </div>

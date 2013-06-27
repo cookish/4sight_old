@@ -10,7 +10,7 @@ Patient details
 
 
 <div class="tabbable">
-  <ul class="nav nav-tabs">
+  <ul class="nav nav-pills">
     <?php
     $section = 'details';
     if (Input::old('surgerySave') || Input::old('surgeryComplete')) $section = 'surgery';
@@ -33,7 +33,9 @@ Patient details
 
                 {{ Form::horizontal_open(null)}}
 
-                {{ $person_form; }}
+                {{ View::make('form_display')
+                    ->with('formData', $person)
+                    ->with('formInfo', Person::$formInfo)}}
                 <?php echo Form::actions(array(Button::primary_submit('Save changes', array('name'=>'save')), Button::link('people/list', 'Cancel'))); ?>
                 {{ Form::close() }}
             </div>

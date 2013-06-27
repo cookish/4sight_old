@@ -52,6 +52,19 @@ class Person extends Eloquent
         return $ret;
     }
 
+    /**
+     * @param null $surgerytype The name of the surgery
+     */
+    public static function priorityList($surgerytype_id = null) {
+        $ret = DB::table('people')
+                ->join('surgeries', 'surgeries.person_id', '=', 'people.id')
+                ->whereNull('outcome');
+        if ($surgerytype_id) {
+            $ret = $ret->where('surgerytype_id', '=', $surgerytype_id);
+        }
+        $ret = $ret->orderBy('grade', 'ASC NULLS LAST')->orderBy('date', 'asc');
+        return $ret->get();
+    }
 
     public static function validate($input) {
         $rules = array(

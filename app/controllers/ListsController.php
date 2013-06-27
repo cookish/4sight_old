@@ -1,10 +1,10 @@
 <?php
 class ListsController extends BaseController {
 
-     function getList($list) {
+     function getList($surgerytype_id) {
         return View::make('lists')
-            ->with('list', $list)
-            ->with('listArray', array('All') + DB::table('surgerytypes')->lists('name'));
+            ->with('surgeryTypeArray', array('All') + DB::table('surgerytypes')->lists('name','id'))
+            ->with('people', Person::priorityList($surgerytype_id));
     }
 
 }

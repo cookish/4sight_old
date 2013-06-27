@@ -34,7 +34,7 @@ Patient details
                 {{ Form::horizontal_open(null)}}
 
                 {{ $person_form; }}
-                <?php echo Form::actions(array(Button::primary_submit('Save changes', array('name'=>'save')), Form::button('Cancel'))); ?>
+                <?php echo Form::actions(array(Button::primary_submit('Save changes', array('name'=>'save')), Button::link('people/list', 'Cancel'))); ?>
                 {{ Form::close() }}
             </div>
     </div>

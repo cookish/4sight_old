@@ -11,7 +11,7 @@ Patient list
 <div class="well">
 {{ Form::horizontal_open(null)}}
 {{ $person_form; }}
-<?php echo Form::actions(array(Button::primary_submit('Save changes'), Form::button('Cancel'))); ?>
+<?php echo Form::actions(array(Button::primary_submit('Save changes'), Button::link('people/list', 'Cancel'))); ?>
 {{ Form::close(); }}
 </div>
 

@@ -54,7 +54,7 @@ class PeopleController extends BaseController {
 
         $orderby = array(array('surname', 'asc'), array('first_name', 'asc'));
         $view = View::make('people_list')
-            ->with('people', Person::personSearch($search, $orderby))
+            ->with('people', Person::personSearch($search, $orderby)->paginate(20))
             ->with('typeahead', $typeahead);
         if ($search) {
             return $view->with('search', $search);

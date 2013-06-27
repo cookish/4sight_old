@@ -53,6 +53,8 @@
         @endforeach
     </table>
 
+        <?php echo $people->links(); ?>
+
 <button class="btn btn-primary" type="button" onclick="location.href='{{ URL::to('people/add') }}'">Add patient</button>
     </div>
 </div>

@@ -49,7 +49,7 @@ class Person extends Eloquent
         foreach ($orderby as $order) {
             $ret->orderBy($order[0], $order[1]);
         }
-        return $ret->get();
+        return $ret;
     }
 
 

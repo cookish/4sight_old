@@ -81,10 +81,13 @@ class PeopleController extends BaseController {
         } elseif (isset($input['surgerySave']) || isset($input['surgeryComplete'])) {
             $input['person_id'] = $person_id;   // we know the person_id from routes
             $v = Surgery::validate($input);
+            $surgery_id = false;
+            if (isset($input['surgerySave'])) $surgery_id = $input['surgerySave'];
+            elseif (isset($input['surgeryComplete'])) $surgery_id = $input['surgeryComplete'];
             if ($v->passes()) {
                 Surgery::updateSurgery($person_id, $input);
                 return Redirect::to('people/' . $person_id)
-                    ->with('alert_surgery', 'Details saved');
+                    ->with('alert_surgery_'.$surgery_id, 'Details saved');
             } else {
                 return Redirect::to('people/' . $person_id)->withInput()->withErrors($v);
             }
@@ -120,19 +123,22 @@ class PeopleController extends BaseController {
     public function detailsGet($person_id) {
         $person = Person::find($person_id);
         if ($person) {
-            $surgery = $person->surgery;
+            $surgery = $person->surgeries()->whereNull('outcome')->first();
         }
         if (!isset($surgery)) {
             $surgery = new Surgery();
         }
+        $past_surgeries = $person->surgeries()->whereNotNull('outcome')->orderBy('id')->get();
         return View::make('people_details')
             ->with('person', $person)
             ->with('surgery', $surgery)
+            ->with('past_surgeries', $past_surgeries)
             ->nest('person_form', 'form_display', array(
                 'saveText' => 'Save changes',
                 'formTarget' => null,
                 'formData' => Person::find($person_id),
-                'formInfo' => Person::$formInfo,
-            ));
+                'formInfo' => Person::$formInfo));
+//            ->nest('surgery_form', 'surgery_form', array(
+//                'surgery' => $surgery)) ;
     }
 }

@@ -17,7 +17,14 @@ class Surgery extends Eloquent
         'biometry_right',
         'histological_outcome_left',
         'histological_outcome_right',
-        'surgery_notes'
+        'surgery_notes',
+        'outcome'
+    );
+
+    public static $outcomes = array(
+        'completed'=>'Completed',
+        'cancelled'=>'Cancelled',
+        'complicated'=>'Complicated'
     );
 
 
@@ -36,7 +43,12 @@ class Surgery extends Eloquent
             'date' => 'required',
             'biometry_left' => 'numeric',
             'biometry_right' => 'numeric',
+            'outcome' => 'in:' . implode(',',array_keys(Surgery::$outcomes))
         );
+        // if surgeryComplete set, then the outcome field is required
+        if (isset($input['surgeryComplete'])) {
+            $rules['outcome'] .= '|required';
+        }
         if (isset($input['surgerytype_id']) && isset($input['eyes'])) {
             if ($input['surgerytype_id']) {
                 $surgeryType = SurgeryType::find($input['surgerytype_id']);
@@ -72,7 +84,10 @@ class Surgery extends Eloquent
     public static function updateSurgery($person_id, $input) {
 
         //create a new surgery if none exists
-        $surgery = Person::find($person_id)->surgery;
+        $surgery_id = false;
+        if (isset($input['surgerySave'])) $surgery_id = $input['surgerySave'];
+        elseif (isset($input['surgeryComplete'])) $surgery_id = $input['surgeryComplete'];
+        if ($surgery_id) $surgery = Surgery::find($surgery_id);
         if (!$surgery) {
             $surgery = new Surgery();
         }

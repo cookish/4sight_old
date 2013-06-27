@@ -29,8 +29,8 @@ class Person extends Eloquent
         return $this->hasMany('Appointment');
     }
 
-    public function surgery() {
-        return $this->hasOne('Surgery');
+    public function surgeries() {
+        return $this->hasMany('Surgery');
     }
 
     /**

@@ -13,116 +13,65 @@ Patient details
   <ul class="nav nav-tabs">
     <?php
     $section = 'details';
-    if (Input::old('surgerySave')) $section = 'surgery';
+    if (Input::old('surgerySave') || Input::old('surgeryComplete')) $section = 'surgery';
     elseif (Input::old('appointmentSave')) $section = 'appointments';
     ?>
     <li {{ ($section == 'details') ? 'class="active"' : ''}}><a href="#tab1" data-toggle="tab">Patient details</a></li>
     <li {{ ($section == 'surgery') ? 'class="active"' : ''}}><a href="#tab2" data-toggle="tab">Surgical details</a></li>
     <li {{ ($section == 'appointments') ? 'class="active"' : ''}}><a href="#tab3" data-toggle="tab">Appointments</a></li>
+    <li {{ ($section == 'past_surgeries') ? 'class="active"' : ''}}><a href="#tab4" data-toggle="tab">Past surgeries</a></li>
   </ul>
   <div class="tab-content">
     <div class="tab-pane {{ ($section == 'details') ? 'active' : '' }}" id="tab1">
+
+        <?php if (Session::get('alert_details')) { ?>
+            <div class="span12 alert alert-success">{{ Session::get('alert_details'); }}</div>
+        <?php } ?>
+        <h3>Patient details</h3>
+
             <div class="well">
-                <?php if (Session::get('alert_details')) { ?>
-                    <div class="span12 alert alert-success">{{ Session::get('alert_details'); }}</div>
-                <?php } ?>
+
                 {{ Form::horizontal_open(null)}}
-                <h3>Patient details</h3>
+
                 {{ $person_form; }}
                 <?php echo Form::actions(array(Button::primary_submit('Save changes', array('name'=>'save')), Form::button('Cancel'))); ?>
                 {{ Form::close() }}
             </div>
     </div>
+
     <div class="tab-pane {{ ($section == 'surgery') ? 'active' : ''}}" id="tab2">
+        <?php
+        echo Form::open(array('class' => 'form-horizontal'));
+
+        if (Session::get('alert_surgery_'.$surgery->id) ) { ?>
+        <div class="alert alert-success">{{ Session::get('alert_surgery_'.$surgery->id); }}</div>
+        <?php } ?>
+        <h3>Surgical details</h3>
         <div class="well">
-            <?php if (Session::get('alert_surgery')) { ?>
-                <div class="alert alert-success">{{ Session::get('alert_surgery'); }}</div>
-            <?php } ?>
-            <h3>Surgical details</h3>
 
-            <?php
-            echo Form::open(array('class' => 'form-horizontal'));
+             <?php
 
-            // date
-            echo Form::control_group(Form::label('date', 'Date:'),
-                Form::text('date', $surgery->date), '',
-                '<span class="text-error"> ' . $errors->first('date') . '</span>');
+            echo  View::make('surgery_form')
+                    ->with('surgery', $surgery)
+                    ->with('show_outcome', false);
 
-            // surgerytype_id
-            echo Form::control_group(Form::label('surgerytype_id', 'Type:'),
-                Form::select('surgerytype_id', array(''=>'') + DB::table('surgerytypes')->lists('name','id'), $surgery->surgerytype_id, array('class'=>"myselect")), '',
-                '<span class="text-error"> '.$errors->first('surgerytype_id').'</span>');
-
-            // eyes
-            $eyes = array('L'=>'L', 'R'=>'R', 'L&R'=>'L&R');
-            echo Form::control_group(Form::label('eyes', 'Eye:', array('class' => 'control-label')),
-                Form::select('eyes', array('' => '') + $eyes, $surgery->eyes, array('class'=>"myselect")),'',
-                '<span class="text-error"> '.$errors->first('eyes').'</span>');
-
-            //ward
-            echo Form::control_group(Form::label('ward', 'Ward:'),
-                Form::textbox('ward', $surgery->ward), '',
-                '<span class="text-error">' . $errors->first('ward') . '</span>');
-
-            // Pre-operative VA left
-            echo Form::control_group(Form::label('pre_op_va_left', 'Pre-operative VA left:'),
-                Form::textarea('pre_op_va_left', $surgery->pre_op_va_left, array('rows'=>2, 'class' => 'span12')), 'eye_left group1',
-            '<span class="text-error"> '.$errors->first('pre_op_va_left').'</span>');
-
-            // Pre-operative VA right
-            echo Form::control_group(Form::label('pre_op_va_right', 'Pre-operative VA right:'),
-                Form::textarea('pre_op_va_right', $surgery->pre_op_va_right, array('rows'=>2, 'class' => 'span12')), 'eye_right group1',
-                '<span class="text-error"> '.$errors->first('pre_op_va_right').'</span>');
-
-            // Post-operative VA left
-            echo Form::control_group(Form::label('post_op_va_left', 'Post-operative VA left:'),
-                Form::textarea('post_op_va_left', $surgery->post_op_va_left, array('rows'=>2, 'class' => 'span12')), 'eye_left group1',
-                '<span class="text-error"> '.$errors->first('post_op_va_left').'</span>');
-
-            // Post-operative VA right
-            echo Form::control_group(Form::label('post_op_va_right', 'Post-operative VA right:'),
-                Form::textarea('post_op_va_right', $surgery->post_op_va_right, array('rows'=>2, 'class' => 'span12')), 'eye_right group1',
-                '<span class="text-error"> '.$errors->first('post_op_va_right').'</span>');
-
-            // biometry left
-            echo Form::control_group(Form::label('biometry_left', 'Biometry left:'),
-                Form::text('biometry_left', $surgery->biometry_left),
-                'eye_left group1',
-                '<span class="text-error"> '.$errors->first('biometry_left').'</span>');
-
-            // biometry right
-            echo Form::control_group(Form::label('biometry_right', 'Biometry right:'),
-                Form::text('biometry_right', $surgery->biometry_right),
-                'eye_right group1',
-                '<span class="text-error"> '.$errors->first('biometry_right').'</span>');
-
-            // hist. outcome left
-            echo Form::control_group(Form::label('histological_outcome_left', 'Histological outcome left:'),
-                Form::textarea('histological_outcome_left', $surgery->histological_outcome_left, array('rows'=>4, 'class' => 'span12')),
-                'eye_left group2',
-                '<span class="text-error"> '.$errors->first('histological_outcome_left').'</span>');
-
-            // hist. outcome right
-            echo Form::control_group(Form::label('histological_outcome_right', 'Histological outcome right:'),
-                Form::textarea('histological_outcome_right', $surgery->histological_outcome_right, array('rows'=>4, 'class' => 'span12')),
-                'eye_right group2',
-                '<span class="text-error"> '.$errors->first('histological_outcome_right').'</span>');
-
-            // surgery notes
-            echo Form::control_group(Form::label('surgery_notes', 'Surgery notes:'),
-                Form::textarea('surgery_notes', $surgery->surgery_notes, array('rows'=>4, 'class'=>'span12')), '',
-                '<span class="text-error">' . $errors->first('ward') . '</span>');?>
-
-
-            <div class="controls"><?php echo Form::submit("Mark surgery as completed", array('name' => 'surgeryComplete', 'class' => 'btn btn-success')); ?></div>
-
-            <?php echo Form::actions(array(
-                Button::primary_submit('Save changes', array('name'=>'surgerySave', 'value'=>'save'))
+            echo Form::actions(array(
+                Button::primary_submit('Save changes', array('name'=>'surgerySave', 'value'=>$surgery->id))
 
             )); ?>
-
-            {{ Form::close() }}
         </div> <!-- end well -->
+
+        <div class="alert alert-info">
+         <?php
+         echo Form::control_group(Form::label('outcome', 'Outcome:'),
+            Form::select('outcome', array(''=>'') + Surgery::$outcomes, $surgery->outcome, array('class'=>"myselect")), '',
+            '<span class="text-error"> '.$errors->first('outcome').'</span>');
+         ?>
+
+            <div class="controls"><?php echo Form::submit("Save and mark surgery as concluded",
+                    array('name' => 'surgeryComplete', 'value'=>$surgery->id, 'class' => 'btn btn-info')); ?></div>
+        </div> <!-- end success alert box -->
+        {{ Form::close() }}
     </div> <!-- end tab 2 -->
 
 
@@ -213,56 +162,39 @@ Patient details
 
     </div> <!-- end tab 3 -->
 
+    <div class="tab-pane {{ ($section == 'past_surgeries') ? 'active' : '' }}" id="tab4">
+
+        <h3>Surgical details</h3>
+        @foreach ($past_surgeries as $psurgery)
+        <?php echo Form::open(array('class' => 'form-horizontal'));?>
+        <div class="well">
+
+            <?php
+
+            if (Session::get('alert_surgery_'.$psurgery->id)) {
+                echo '<div class="alert alert-success">'.Session::get('alert_surgery_'.$psurgery->id).'</div>';
+            }
+            ?>
+
+
+            {{ View::make('surgery_form')
+                ->with('surgery', $psurgery)
+                ->with('show_outcome', true)
+            }}
+
+            <?php echo Form::actions(array(
+                Button::primary_submit('Save changes', array('name'=>'surgerySave', 'value'=>$psurgery->id))
+
+            )); ?>
+        </div> <!-- end well -->
+        {{ Form::close() }}
+        @endforeach
+
+
+    </div>  <!-- end tab 4 -->
+
   </div> <!-- end tab content>
 
-<!--    <script src="http://code.jquery.com/jquery.js"></script>-->
-    <script src="/vendor/jquery/jquery.js"></script>
-    <script>
-        showAllDivs = function () {
-            $(".eye_left").show();
-            $(".eye_right").show();
-        };
 
-        handleNewSelection = function () {
-
-            showAllDivs();
-            var typeSelect = $("#surgerytype_id").val();
-            var groupOne = new Array('1','2','3');
-            var groupTwo = new Array('7','8');
-            if (jQuery.inArray(typeSelect, groupOne) > -1) {
-                $(".group2").hide();
-            } else if (jQuery.inArray(typeSelect, groupTwo) > -1) {
-                $(".group1").hide();
-            } else {
-                $(".group1").hide();
-                $(".group2").hide();
-            }
-
-            var eyeSelect = $("#eyes").val();
-            switch (eyeSelect) {
-                case 'L':
-                    $(".eye_right").hide();
-                    break;
-                case 'R':
-                    $(".eye_left").hide();
-                    break;
-                case 'L&R':
-                    break;
-                default:
-                    $(".eye_left").hide();
-                    $(".eye_right").hide();
-            }
-        };
-
-        $(document).ready(function() {
-
-    $("#surgerytype_id").change(handleNewSelection);
-    $("#eyes").change(handleNewSelection);
-
-            // Run the event handler once now to ensure everything is as it should be
-            handleNewSelection();
-
-        });
-    </script>
 
     @endsection

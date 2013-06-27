@@ -47,6 +47,7 @@ class CreateSurgeries extends Migration {
             $table->string('histological_outcome_right', 256)->nullable();
             $table->string('surgery_notes', 512)->nullable();
             $table->string('ward', 20)->nullable();
+            $table->string('outcome', 12)->nullable();
 
             // created_at | updated_at DATETIME
             $table->timestamps();

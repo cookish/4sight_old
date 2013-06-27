@@ -32,7 +32,7 @@ Menu
 
 <div class="row">
     <div class="span3"><button class="btn btn-large btn-primary" type="button" onclick="location.href='{{ URL::to('lists/pre-op') }}'">Lists</button></div>
-    <div class="span9">View patients in pre-op, operation and post-op lists</div>
+    <div class="span9">View lists of patients categorised by operation type, and sorted according to urgency</div>
 </div>
 <div class="row">&nbsp;</div>
 

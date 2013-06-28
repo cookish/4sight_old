@@ -23,13 +23,15 @@ class PeopleTableSeeder extends Seeder {
     public function run()
     {
         DB::table('people')->delete();
-        $firstnames = array('Fred', 'Joe', 'Bob', 'Jordan', 'Precious', 'Lindi', 'Samuel');
-        $surnames = array('Brown', 'Smith', 'Mavundla', 'Bloggs', 'Dlamini', 'Jackson', 'Fredericks');
-        $hospitalnumbers = array('12345432', '4546532', '3426562', '3246', '348264', '7469301', '38523');
-        $grades = array('1', '4', NULL, '3', '2', '1', '1');
+        $firstnames = array('Fred', 'Joe', 'Bob', 'Jordan', 'Precious', 'Lindi', 'Samuel','Loyiso','Tony','George');
+        $surnames = array('Brown', 'Smith', 'Mavundla', 'Bloggs', 'Dlamini', 'Jackson', 'Fredericks','Dandala','Stark','Lucas');
+        $hospitalnumbers = array('12345432', '4546532', '3426562', '3246', '348264', '7469301', '38523','12334','76376','1445');
+        $grades = array('1', '4', null, '3', '2', '1', '1',null,'2','2');
         $date_booked = array('21 June 2012', '23 July 2012', '3 May 2012', '29 December 2012', '23 April 2013',
-            '16 June 2015', '2 Feb 2014');
-        $surgery_types = array('1', '1', '3', '2','6','1','2');
+            '16 June 2011', '2 Feb 2010', '1 Sep 2010', '13 Dec 2010','3 Mar 2013');
+        $surgery_types = array('1', '1', '3', '2','6','1','2','2','5','4');
+        $dates = array('1 June 2011', '21 Aug 2011', null, '13 Feb 2013',null,'3 March 2010','28 June 2013',
+            '6 Aug 2013','11 Jul 2013','28 June 2013');
         foreach ($firstnames as $key=>$name) {
             Person::create(array('first_name' => $firstnames[$key], 'surname' => $surnames[$key],
                 'hospital_number' => $hospitalnumbers[$key], 'grade' => $grades[$key],
@@ -53,7 +55,7 @@ class PeopleTableSeeder extends Seeder {
         $i = 0;
         foreach ($surgery_types as $s) {
             $i++;
-            Surgery::create(array('person_id' => $i, 'surgerytype_id' => $s));
+            Surgery::create(array('person_id' => $i, 'surgerytype_id' => $s, 'date' => $dates[$i-1]));
         }
 
 

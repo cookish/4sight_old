@@ -57,6 +57,19 @@ class Person extends Eloquent
      */
     public static function priorityList($surgerytype_id = null, $scheduled = 'today') {
         $ret = DB::table('people')
+                ->select(DB::raw("*,
+                        (select date from appointments
+                            join appointmenttypes on (appointments.appointmenttype_id = appointmenttypes.id)
+                            where person_id = people.id and appointmenttypes.name = 'Pre-op' order by date asc limit 1)
+                        as preop_date,
+                        (select date from appointments
+                            join appointmenttypes on (appointments.appointmenttype_id = appointmenttypes.id)
+                            where person_id = people.id and appointmenttypes.name = 'Post-op' order by date asc limit 1)
+                        as postop_date"))
+//                ->select(DB::raw("(select date from appointments
+//                        join appointmenttypes on (appointments.appointmenttype_id = appointmenttypes.id)
+//                        where person_id = people.id and appointmenttypes.name = 'preop' order by date asc limit 1) as
+//                        preop_date"))
                 ->join('surgeries', 'surgeries.person_id', '=', 'people.id')
                 ->whereNull('outcome');
         if ($surgerytype_id) {

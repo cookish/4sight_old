@@ -45,32 +45,53 @@
     'Date booked',
     'Pre-op date',
     'Post-op date',
-    'Contact history',
-    'Age',
-    'SNR'
+    'Age'
 );
 if ($current_list == 'scheduled') {
-    $headers = array('Surgery date') + $headers;
+    $headers = array_merge(array('Surgery date'),  $headers);
+}
+if ($current_list == 0) {
+    $headers = array_merge(array('Type'),  $headers);
 }
 ?>
 {{ Table::striped_hover_condensed_open() }}
-{{ Table::headers($headers) }}
+<thead>
+<tr class="">
+    @foreach ($headers as $header)
+        <th>{{ $header }}</th>
+    @endforeach
+</tr>
+</thead>
+
 
 @foreach ($people as $person)
-    <tr id="{{ $person->id }}">
+    <?php
+    //calculate age
+    $age = '';
+    if ($person->date_of_birth) {
+        $tz  = new DateTimeZone('Africa/Johannesburg');
+        $age = DateTime::createFromFormat('Y-m-d', $person->date_of_birth, $tz)
+                ->diff(new DateTime('now', $tz))
+                ->y;
+        if ($age >= 60) $age .= ' (SNR)';
+    }
+    ?>
+
+    <tr id="{{ $person->id }}" class="">
     @if ($current_list == 'scheduled')
         <td>{{ $person->date }}</td>
+    @endif
+    @if ($current_list == 0)
+        <td>{{ $person->surgerytype_id }}</td>
     @endif
     <td>{{ $person->first_name }}</td>
     <td>{{ $person->surname }}</td>
     <td>{{ $person->hospital_number }}</td>
     <td>{{ $person->grade }}</td>
     <td>{{ $person->date_booked }}</td>
-    <td>{{ '' }}</td>
-    <td>{{ '' }}</td>
-    <td>{{ $person->contact_history }}</td>
-    <td>{{ '' }}</td>
-    <td>{{ '' }}</td>
+    <td>{{ $person->preop_date }}</td>
+    <td>{{ $person->postop_date }}</td>
+    <td>{{ $age }}</td>
     </tr>
 @endforeach
 

@@ -41,7 +41,7 @@ Route::get('people/list', 'PeopleController@listPeople');
 Route::controller('people', 'PeopleController');
 
 Route::controller('appointments', 'AppointmentsController');
-Route::get('lists/{list}', 'ListsController@getList');
+Route::get('lists/{surgerytype}/{list}', 'ListsController@getList');
 
 Route::get('/', function()
 {

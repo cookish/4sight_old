@@ -55,15 +55,27 @@ class Person extends Eloquent
     /**
      * @param null $surgerytype The name of the surgery
      */
-    public static function priorityList($surgerytype_id = null) {
+    public static function priorityList($surgerytype_id = null, $scheduled = 'today') {
         $ret = DB::table('people')
                 ->join('surgeries', 'surgeries.person_id', '=', 'people.id')
                 ->whereNull('outcome');
         if ($surgerytype_id) {
             $ret = $ret->where('surgerytype_id', '=', $surgerytype_id);
         }
-        $ret = $ret->orderBy('grade', 'ASC NULLS LAST')->orderBy('date', 'asc');
-        return $ret->get();
+        if ($scheduled == 'today') {
+            $ret = $ret->where('surgeries.date', '=', DB::raw('now()::date'));
+        } elseif ($scheduled == 'scheduled') {
+            $ret = $ret->whereNotNull('surgeries.date')
+                    ->orderBy('date');  //order by date of op, then priority
+        } elseif ($scheduled == 'notscheduled') {
+            $ret = $ret->whereNull('surgeries.date');
+        }
+
+        //order by priority
+        $ret = $ret
+                ->orderBy('grade', 'ASC NULLS LAST')
+                ->orderBy('date_booked', 'asc');
+        return $ret;
     }
 
     public static function validate($input) {

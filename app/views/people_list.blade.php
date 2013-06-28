@@ -36,8 +36,6 @@
     <div class="span12">
 
 
-
-
     <table class="table table-condensed table-striped table-hover">
         <thead>
             <tr>
@@ -49,13 +47,13 @@
             </tr>
         </thead>
         @foreach ($people as $person)
-            <?php $date = new DateTime($person->date_booked); ?>
-            <tr id="{{ $person->id }}">
+<!--            --><?php //$date = new DateTime($person->date_booked); ?>
+            <tr id="{{ $person->id }}" class="person">
                 <td>{{ $person->first_name }}</td>
                 <td>{{ $person->surname }}</td>
                 <td>{{ $person->hospital_number }}</td>
                 <td>{{ $person->grade }}</td>
-                <td>{{ $date->format('j M Y') }}</td>
+                <td>{{ $person->date_booked }}</td>
             </tr>
         @endforeach
     </table>

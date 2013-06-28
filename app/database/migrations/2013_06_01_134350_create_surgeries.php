@@ -33,7 +33,7 @@ class CreateSurgeries extends Migration {
             $table->integer('surgerytype_id')->unsigned();
             $table->foreign('surgerytype_id')->references('id')->on('surgerytypes')->on_update('cascade');
 
-            $table->string('date', 20)->nullable();
+            $table->date('date')->nullable();
             $table->boolean('completed')->default(false);
             $table->string('eyes', 5)->nullable();
 

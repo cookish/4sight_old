@@ -24,13 +24,14 @@ foreach ($formInfo as $field => $fieldData) {
                 Form::select($field, $fieldData['options'], $value), '',
             '<span class="text-error"> '. $errors->first($field) . '</span>');
             break;
-        case 'timestamp':
-            if ($value) {
-                $date = new DateTime($value);
-                $value = $date->format('j F Y');
-            }
+        case 'timestamp': ;
+        case 'date':
+//            if ($value) {
+//                $date = new DateTime($value);
+//                $value = $date->format('j F Y');
+//            }
             echo Form::control_group(Form::label($field, $fieldData['label'] . ':', $required),
-                Form::text($field, Input::old($field, $value)),'',
+                Form::text($field, date('j F Y',strtotime(Input::old($field, $value)))),'',
                 '<span class="text-error"> '. $errors->first($field) . '</span>');
             break;
         case 'textarea':

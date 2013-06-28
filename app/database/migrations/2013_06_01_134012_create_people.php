@@ -20,8 +20,8 @@ class CreatePeople extends Migration {
             $table->string('hospital_number', 64);
             $table->string('gender', 6)->nullable();
             $table->integer('grade')->nullable();
-            $table->string('date_booked', 20);
-            $table->timestamp('date_of_birth')->nullable();
+            $table->date('date_booked');
+            $table->date('date_of_birth')->nullable();
 
             $table->string('phone_1', 20)->nullable();
             $table->string('phone_2', 20)->nullable();

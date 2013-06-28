@@ -1,33 +1,3 @@
-.form-horizontal label.myshortform {
-    width: 40px;
-    text-align: left;
-}
-
-.form-horizontal label.mymediumform {
-    width: 120px;
-    text-align: left;
-}
-
-
-/*.form-horizontal .control-label {*/
-    /*width: 130px;*/
-/*}*/
-
-/*.form-horizontal div.controls {*/
-    /*margin-left: 150px;*/
-/*}*/
-
-/*.form-horizontal .controls input {*/
-    /*width: 170px;*/
-/*}*/
-
-.form-horizontal .control-group div.myshortform {
-    margin-left: 40px;
-}
-
-.form-horizontal .control-group div.mymediumform {
-    margin-left: 180px;
-}
 
 input.myshortinput {
     width: 125px;
@@ -37,12 +7,12 @@ input.myshortinput {
     width: auto;
 }
 
-.mynomargins {
-    margin: 0 0 0 0;
-}
-
 label.required {
     font-weight: bold;
     text-align: right;
 }
 
+/* not used right now. */
+/*tr.mysmallfont td, tr.mysmallfont th {*/
+    /*font-size:0.9em;*/
+/*}*/

@@ -38,6 +38,8 @@
 </ul>
 
 <?php $headers = array(
+    'Type',
+    'Surgery date',
     'First name',
     'Surname',
     'Hospital',
@@ -47,12 +49,6 @@
     'Post-op date',
     'Age'
 );
-if ($current_list == 'scheduled') {
-    $headers = array_merge(array('Surgery date'),  $headers);
-}
-if ($current_list == 0) {
-    $headers = array_merge(array('Type'),  $headers);
-}
 ?>
 {{ Table::striped_hover_condensed_open() }}
 <thead>
@@ -78,12 +74,8 @@ if ($current_list == 0) {
     ?>
 
     <tr id="{{ $person->id }}" class="">
-    @if ($current_list == 'scheduled')
-        <td>{{ $person->date }}</td>
-    @endif
-    @if ($current_list == 0)
-        <td>{{ $person->surgerytype_id }}</td>
-    @endif
+    <td>{{ $person->surgerytype_id }}</td>
+    <td>{{ $person->date }}</td>
     <td>{{ $person->first_name }}</td>
     <td>{{ $person->surname }}</td>
     <td>{{ $person->hospital_number }}</td>

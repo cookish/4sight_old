@@ -68,7 +68,7 @@
 <script src="/vendor/jquery/jquery.js"></script>
 <script>
     $(document).ready(function () {
-        $('.table tr').click(function (event) {
+        $('.table tr:not(:first)').click(function (event) {
             // alert($(this).attr('id')); //trying to alert id of the clicked row
             window.location = '{{ URL::to('people/'); }}' + '/' +  $(this).attr("id");
         });

@@ -67,11 +67,17 @@ class Surgery extends Eloquent
                             $rules[$surgeryDataType->name . '_left'].= '|required';
                             $rules[$surgeryDataType->name . '_right'].= '|required';
                         }
+                        //remove extra | at beginning
+                        $rules[$surgeryDataType->name . '_right'] = trim($rules[$surgeryDataType->name . '_right'],'|');
+                        $rules[$surgeryDataType->name . '_left'] = trim($rules[$surgeryDataType->name . '_right'],'|');
+
 
                     }
                 }
             }
         }
+        //remove empty rules
+        $rules = array_filter($rules);
         return $rules;
     }
 

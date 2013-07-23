@@ -1,4 +1,5 @@
 <?php
+date_default_timezone_set('Africa/Johannesburg');
 if (!isset($formData)) {
     $formData = array();
 }
@@ -9,12 +10,14 @@ if (!isset($formData)) {
 // formData has data for each of the fields from the database, if set
 
 foreach ($formInfo as $field => $fieldData) {
-    $value = (isset($formData->{$field}) ? $formData->{$field} : null);
+    $value = (isset($formData{$field}) ? $formData{$field} : null);
+    $value = Input::old($field, $value);
+
     $required = (isset($fieldData['required']) && $fieldData['required']) ? array('class'=>'required') : null;
     switch ($fieldData['type']) {
         case 'text':
             echo Form::control_group(Form::label($field, $fieldData['label'] . ':', $required),
-                Form::text($field, Input::old($field, $value)),'',
+                Form::text($field, $value),'',
                 '<span class="text-error"> '. $errors->first($field) . '</span>');
             break;
         case 'dropdown':
@@ -26,17 +29,17 @@ foreach ($formInfo as $field => $fieldData) {
             break;
         case 'timestamp': ;
         case 'date':
-//            if ($value) {
-//                $date = new DateTime($value);
-//                $value = $date->format('j F Y');
-//            }
+            if ($value) {
+                $date = new DateTime($value);
+                $value = $date->format('j F Y');
+            }
             echo Form::control_group(Form::label($field, $fieldData['label'] . ':', $required),
-                Form::text($field, date('j F Y',strtotime(Input::old($field, $value)))),'',
+                Form::text($field, $value),'',
                 '<span class="text-error"> '. $errors->first($field) . '</span>');
             break;
         case 'textarea':
             echo Form::control_group(Form::label($field, $fieldData['label'] . ':', $required),
-                Form::xxlarge_textarea($field, Input::old($field, $value), array('rows' => '4')),'',
+                Form::xxlarge_textarea($field, $value, array('rows' => '4')),'',
                 '<span class="text-error"> '. $errors->first($field) . '</span>');
             break;
     }

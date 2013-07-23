@@ -33,9 +33,15 @@ Patient details
 
                 {{ Form::horizontal_open(null)}}
 
+                <?php
+                //set the date booked to default to today
+                $formInfo = Person::$formInfo;
+                //$formInfo = today;
+                ?>
+
                 {{ View::make('form_display')
                     ->with('formData', $person)
-                    ->with('formInfo', Person::$formInfo)}}
+                    ->with('formInfo', $formInfo)}}
                 <?php echo Form::actions(array(Button::primary_submit('Save changes', array('name'=>'save')), Button::link('people/list', 'Cancel'))); ?>
                 {{ Form::close() }}
             </div>

@@ -8,19 +8,14 @@ class PeopleController extends BaseController {
      * @return mixed
      */
     public function addPost() {
-        $v = Person::validate(Input::all());
+        $v = Person::validateNew(Input::all());
         if ($v->passes()) {
-            // a new surgery is created also...
-            $u = Surgery::validate(Input::all());
-            if ($u->passes()) {
-                $person_id = Person::updateOrInsert(new Person, Input::all());
-                Surgery::updateSurgery($person_id, Input::all());
-                return Redirect::to('people/' . $person_id)
-                        ->with('alert_details', 'Patient created');
-            } else {
-                return Redirect::to('people/add')->withInput()->withErrors($u);
-            }
+            $person_id = Person::updateOrInsert(new Person, Input::all());
+            Surgery::updateSurgery($person_id, Input::all());
+            return Redirect::to('people/' . $person_id)
+                ->with('alert_details', 'Patient created');
         } else {
+
             return Redirect::to('people/add')->withInput()->withErrors($v);
         }
     }

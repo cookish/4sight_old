@@ -4,6 +4,16 @@ class Person extends Eloquent
 {
 
 
+    //relationship info
+    public function appointments() {
+        return $this->hasMany('Appointment');
+    }
+
+    public function surgeries() {
+        return $this->hasMany('Surgery');
+    }
+
+    //info for displaying a person form
     public static $formInfo = array(
         'first_name' => array('type'=>'text', 'label' => 'First name', 'required'=> true),
         'surname' => array('type'=>'text', 'label' => 'Surname', 'required'=> true),
@@ -24,14 +34,6 @@ class Person extends Eloquent
 
 
 
-
-    public function appointments() {
-        return $this->hasMany('Appointment');
-    }
-
-    public function surgeries() {
-        return $this->hasMany('Surgery');
-    }
 
     /**
      * Returns people matching name, surname or hospital number
@@ -91,7 +93,7 @@ class Person extends Eloquent
         return $ret;
     }
 
-    public static function validate($input) {
+    public static function getValidateRules() {
         $rules = array(
             'first_name' => 'required',
             'surname' => 'required',
@@ -101,9 +103,21 @@ class Person extends Eloquent
             'gender' => 'in:male,female,0',
             'short_notice' => 'in:yes,no,0',
         );
+        return $rules;
+    }
 
+    public static function validate($input) {
+        $rules = Person::getValidateRules();
         return Validator::make($input, $rules);
+    }
 
+    public static function validateNew($input) {
+        $rules = array_merge(Person::getValidateRules(), Surgery::getValidateRules($input, false));
+//        print_r($rules);
+//        die();
+        $v = Validator::make($input, $rules);
+
+        return $v;
     }
 
     public static function updateOrInsert($person, $input) {
@@ -113,11 +127,9 @@ class Person extends Eloquent
                 $person->{$field} = (($input[$field] !== '') ? $input[$field] : null);
             }
         }
-
         $person->save();
 
         return $person->id;
-
 
     }
 

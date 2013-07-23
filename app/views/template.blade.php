@@ -25,22 +25,25 @@ echo Navbar::inverse(null, Navbar::FIX_TOP)
                 array('Home', URL::to('/'), (URL::current() == URL::to('/'))),
                 array('New', URL::to('people/add'), (strpos(URL::current(),'people/add'))),
                 array('Patients', URL::to('people/list'), (strpos(URL::current(),'people/list'))),
-                array('Appointments', URL::to('appointments/create'), (strpos(URL::current(),'appointments/create'))),
+                array('Schedule', URL::to('schedule/0'), (strpos(URL::current(),'schedule/'))),
                 array('Lists', URL::to('lists/0/today'), (strpos(URL::current(),'lists'))),
             )
         )
     );
 ?>
 
-    <div class="container">
+
+    <div class="container-fluid">
         <div class="row-fluid">
-            <div class="span10">
+            <div class="span2">
+                @yield('sidebar')
+            </div>
+            <div class="span8">
                 @yield('content')
             </div>
         </div>
     </div>
 <!--    <script src="http://code.jquery.com/jquery.js"></script>-->
-    <script src="/vendor/jquery/jquery.js"></script>
     <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
 </body>
 </html>

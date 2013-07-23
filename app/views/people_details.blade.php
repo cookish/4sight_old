@@ -4,13 +4,13 @@
 Patient details
 @endsection
 
-@section('content')
-
-    <div class="span12 text-center"><h1>{{ $person->first_name }} {{ $person->surname}}</h1><hr/></div>
-
-
+@section('sidebar')
+Patient:
+<h4>{{ $person->first_name }} {{ $person->surname }}</h4>
+<br>
+<br>
 <div class="tabbable">
-  <ul class="nav nav-pills">
+<ul class="nav nav-pills">
     <?php
     $section = 'details';
     if (Input::old('surgerySave') || Input::old('surgeryComplete')) $section = 'surgery';
@@ -20,13 +20,23 @@ Patient details
     <li {{ ($section == 'surgery') ? 'class="active"' : ''}}><a href="#tab2" data-toggle="tab">Surgical details</a></li>
     <li {{ ($section == 'appointments') ? 'class="active"' : ''}}><a href="#tab3" data-toggle="tab">Appointments</a></li>
     <li {{ ($section == 'past_surgeries') ? 'class="active"' : ''}}><a href="#tab4" data-toggle="tab">Past surgeries</a></li>
-  </ul>
+</ul>
+</div>
+
+
+@if (Session::get('alert_details'))
+    <div class="span12 alert alert-success">{{ Session::get('alert_details'); }}</div>
+@endif
+@if (Session::get('alert_surgery_'.$surgery->id) )
+    <div class="alert alert-success">{{ Session::get('alert_surgery_'.$surgery->id); }}</div>
+@endif
+@endsection
+
+@section('content')
+<div class="tabbable">
   <div class="tab-content">
     <div class="tab-pane {{ ($section == 'details') ? 'active' : '' }}" id="tab1">
 
-        <?php if (Session::get('alert_details')) { ?>
-            <div class="span12 alert alert-success">{{ Session::get('alert_details'); }}</div>
-        <?php } ?>
         <h3>Patient details</h3>
 
             <div class="well">
@@ -49,11 +59,8 @@ Patient details
 
     <div class="tab-pane {{ ($section == 'surgery') ? 'active' : ''}}" id="tab2">
         <?php
-        echo Form::open(array('class' => 'form-horizontal'));
+        echo Form::open(array('class' => 'form-horizontal'));?>
 
-        if (Session::get('alert_surgery_'.$surgery->id) ) { ?>
-        <div class="alert alert-success">{{ Session::get('alert_surgery_'.$surgery->id); }}</div>
-        <?php } ?>
         <h3>Surgical details</h3>
         <div class="well">
 

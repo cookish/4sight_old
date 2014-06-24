@@ -4,7 +4,6 @@
 Menu
 @endsection
 
-
 @section('content')
 
 <div class="row"><div class=".col-sm-12"><h1>Menu</h1></div></div>

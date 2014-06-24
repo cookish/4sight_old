@@ -42,12 +42,12 @@
 
 	<div class="container">
         <div class="row">
-            <div class=".col-sm-2">
+<!--           <div class="col-sm-1">-->
                 @yield('sidebar')
-            </div>
-            <div class=".col-sm-8">
+<!--            </div>-->
+<!--            <div class="col-sm-8">-->
                 @yield('content')
-            </div>
+<!--            </div>-->
         </div>
     </div>
     <script src="http://code.jquery.com/jquery.js"></script>

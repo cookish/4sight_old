@@ -40,7 +40,7 @@ Route::get('people/add', 'PeopleController@addGet');
 Route::get('people/list', 'PeopleController@listPeople');
 Route::controller('people', 'PeopleController');
 
-Route::controller('appointments', 'AppointmentsController');
+Route::get('schedule/{surgerytype}/{date?}', 'ScheduleController@getSchedule');
 Route::get('lists/{surgerytype}/{list}', 'ListsController@getList');
 
 Route::get('/', function()

@@ -100,7 +100,7 @@ class Person extends Eloquent
             'hospital_number' => 'required',
             'grade' => 'integer|min:0|max:4',
             'date_booked' => 'required',
-            'gender' => 'in:male,female,0',
+            'gender' => 'in:male,female|required',
             'short_notice' => 'in:yes,no,0',
         );
         return $rules;

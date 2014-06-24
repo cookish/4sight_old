@@ -15,7 +15,6 @@ class PeopleController extends BaseController {
             return Redirect::to('people/' . $person_id)
                 ->with('alert_details', 'Patient created');
         } else {
-
             return Redirect::to('people/add')->withInput()->withErrors($v);
         }
     }
@@ -74,7 +73,7 @@ class PeopleController extends BaseController {
             if ($v->passes()) {
                 Person::updateOrInsert(Person::find($person_id), Input::all());
                 return Redirect::to('people/'. $person_id)
-                    ->with('alert_details', 'Details saved');
+                    ->with('alert_details', 'Person details saved');
             } else {
                 return Redirect::to('people/' . $person_id)->withInput()->withErrors($v);
             }
@@ -88,7 +87,7 @@ class PeopleController extends BaseController {
             if ($v->passes()) {
                 Surgery::updateSurgery($person_id, $input);
                 return Redirect::to('people/' . $person_id)
-                    ->with('alert_surgery_'.$surgery_id, 'Details saved');
+                    ->with('alert_surgery_'.$surgery_id, 'Surgery details saved');
             } else {
                 return Redirect::to('people/' . $person_id)->withInput()->withErrors($v);
             }

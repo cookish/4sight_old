@@ -5,6 +5,12 @@ Patient details
 @endsection
 
 @section('sidebar')
+<?php require_once(app_path().'/views/form.inc.php');
+//Session::forget('_old_input');
+//Session::push('_old_input.date', '4');
+//Session::put('', array('date'=>'3'));
+//print_r(Session::all());
+?>
 Patient:
 <h4>{{ $person->first_name }} {{ $person->surname }}</h4>
 <br>
@@ -25,70 +31,98 @@ Patient:
 
 
 @if (Session::get('alert_details'))
-    <div class="span12 alert alert-success">{{ Session::get('alert_details'); }}</div>
+    <div class="col-sm-12 alert alert-success">{{ Session::get('alert_details'); }}</div>
 @endif
 @if (Session::get('alert_surgery_'.$surgery->id) )
     <div class="alert alert-success">{{ Session::get('alert_surgery_'.$surgery->id); }}</div>
 @endif
+
+<?php //print_r($errors->all()); ?>
 @endsection
 
 @section('content')
 <div class="tabbable">
   <div class="tab-content">
     <div class="tab-pane {{ ($section == 'details') ? 'active' : '' }}" id="tab1">
-
         <h3>Patient details</h3>
-
             <div class="well">
-
-                {{ Form::horizontal_open(null)}}
+	            {{ Form::model($person, array('class'=>'form-horizontal', 'role'=>'form')) }}
 
                 <?php
                 //set the date booked to default to today
-                $formInfo = Person::$formInfo;
+//                $formInfo = Person::$formInfo;
                 //$formInfo = today;
+
+
+	            form_display::make('text','first_name')->required()->errors($errors)->draw();
+	            form_display::make('text','surname')->required()->errors($errors)->draw();
+	            form_display::make('text','hospital_number')->required(true)->errors($errors)->draw();
+	            form_display::make('select','gender')->required()->errors($errors)
+	                ->options(array('male'=>'Male', 'female'=>'Female'))->divCss("col-sm-2")->draw();
+	            form_display::make('select','grade')->errors($errors)
+	                ->options(array(1=>'1', 2=>'2', 3=>'3', 4=>'4'))->divCss('col-sm-2')->draw();
+	            form_display::make('date','date_booked')->required()->errors($errors)->draw();
+	            form_display::make('date','date_of_birth')->required()->errors($errors)->draw();
+	            form_display::make('text','phone_1')->label('Contact phone')->required()->errors($errors)->draw();
+	            form_display::make('text','phone_2')->label('Alternate phone')->errors($errors)->draw();
+	            form_display::make('textarea','contact_history')->rows(5)->errors($errors)->draw();
+	            form_display::make('select','short_notice')->required()->errors($errors)
+	                ->options(array('yes'=>'Yes', 'no'=>'No'))->divCss("col-sm-2")->draw();
+                form_display::make('textarea','cancellation_notes')->rows(5)->errors($errors)->draw();
                 ?>
 
-                {{ View::make('form_display')
-                    ->with('formData', $person)
-                    ->with('formInfo', $formInfo)}}
-                <?php echo Form::actions(array(Button::primary_submit('Save changes', array('name'=>'save')), Button::link('people/list', 'Cancel'))); ?>
+<!--                 View::make('form_display')-->
+<!--                    ->with('formData', $person)-->
+<!--                    ->with('formInfo', $formInfo)-->
+
+	            {{ Form::submit('Save changes', array('name'=>'save','class'=>'btn btn-primary')) }}
+	            {{ link_to('people/list', 'Cancel', array('class' => 'btn btn-default')) }}
+
                 {{ Form::close() }}
             </div>
     </div>
 
+
+<!-- ------------------------------------------------ SURGERY  ------------------------------------------------ -->
+
     <div class="tab-pane {{ ($section == 'surgery') ? 'active' : ''}}" id="tab2">
-        <?php
-        echo Form::open(array('class' => 'form-horizontal'));?>
+
+        {{ Form::model($surgery, array('class' => 'form-horizontal')) }}
+<!--	    --><?php //print_r($surgery);
+//	    echo "\n\n";
+//	    print_r($past_surgeries);
+	    ?>
 
         <h3>Surgical details</h3>
         <div class="well">
 
-             <?php
-
+            <?php
             echo  View::make('surgery_form')
                     ->with('surgery', $surgery)
                     ->with('show_outcome', false);
-
-            echo Form::actions(array(
-                Button::primary_submit('Save changes', array('name'=>'surgerySave', 'value'=>$surgery->id))
-
-            )); ?>
+			?>
+	        {{ Form::hidden('surgerySave',$surgery->id) }}
+	        {{ Form::submit('Save changes', array('class'=>'btn btn-primary')) }}
         </div> <!-- end well -->
 
         <div class="alert alert-info">
          <?php
-         echo Form::control_group(Form::label('outcome', 'Outcome:'),
-            Form::select('outcome', array(''=>'') + Surgery::$outcomes, $surgery->outcome, array('class'=>"myselect")), '',
-            '<span class="text-error"> '.$errors->first('outcome').'</span>');
+         form_display::make('select', 'outcome')->options(Surgery::$outcomes)->defaultVal($surgery->outcome)->errors($errors)
+	         ->draw();
+//         echo Form::control_group(Form::label('outcome', 'Outcome:'),
+//            Form::select('outcome', array(''=>'') + Surgery::$outcomes, $surgery->outcome, array('class'=>"myselect")), '',
+//            '<span class="text-error"> '.$errors->first('outcome').'</span>');
          ?>
+	        <div class="controls">
+	            {{ Form::hidden('surgeryComplete',$surgery->id) }}
 
-            <div class="controls"><?php echo Form::submit("Save and mark surgery as concluded",
-                    array('name' => 'surgeryComplete', 'value'=>$surgery->id, 'class' => 'btn btn-info')); ?></div>
+                {{ Form::submit("Save and mark surgery as concluded", array('class' => 'btn btn-info')) }}
+	        </div>
         </div> <!-- end success alert box -->
         {{ Form::close() }}
     </div> <!-- end tab 2 -->
 
+<!-- --------------------------------------------- APPOINTMENTS --------------------------------------------- -->
 
     <div class="tab-pane {{ ($section == 'appointments') ? 'active' : ''}}" id="tab3">
 
@@ -130,9 +164,9 @@ Patient:
             }
             ?>
 
-                <div class="control-group"><textarea class="span12" rows="4" name="notes">{{ $appointment->notes; }}</textarea></div>
+                <div class="control-group"><textarea class=".col-sm-12" rows="4" name="notes">{{ $appointment->notes; }}</textarea></div>
                 <button class="btn btn-primary" name="appointmentSave" value="{{ $appointment->id; }}">Save</button>
-                <button class="btn" name="appointmentDelete" value="{{ $appointment->id; }}"><i class="icon-search icon-trash"></i> Delete</button>
+                <button class="btn" name="appointmentDelete" value="{{ $appointment->id; }}"><i class="glyphicon-search glyphicon-trash"></i> Delete</button>
                 <?php echo Form::close();?>
             </div> <!-- end well -->
         @endforeach
@@ -142,7 +176,9 @@ Patient:
         <a href="#myModal" role="button" class="btn" data-toggle="modal">Add appointment</a>
 
         <!-- Modal -->
-        <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
             <?php echo Form::open(array('class' => 'form-horizontal')); ?>
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -150,8 +186,7 @@ Patient:
             </div>
             <div class="modal-body">
 
-
-                <div class="control-group span6">
+                <div class="control-group .col-sm-6">
 
                     <select class="myselect" name="appointmenttype_id">
                         @foreach (DB::table('appointmenttypes')->get(array('id', 'name')) as $apptype)
@@ -161,55 +196,49 @@ Patient:
                     </select>
                 </div>
 
-                <div class="control-group span6 text-right">Date: <input class="myshortinput" name="date" type="text"/></div>
+                <div class="control-group .col-sm-6 text-right">Date: <input class="myshortinput" name="date" type="text"/></div>
                 Notes:<br/>
-                <div class="control-group"><textarea class="span12" rows="4" name="notes"></textarea></div>
-
-
+                <div class="control-group"><textarea class=".col-sm-12" rows="4" name="notes"></textarea></div>
 
             </div> <!-- end modal body -->
             <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
                 <button class="btn btn-primary" name="appointmentAdd">Save changes</button>
             </div>
+            </div>
             <?php echo Form::close();?>
+            </div>
         </div> <!-- end modal -->
 
     </div> <!-- end tab 3 -->
+
+<!-- --------------------------------------------- PAST SURGERIES --------------------------------------------- -->
+
 
     <div class="tab-pane {{ ($section == 'past_surgeries') ? 'active' : '' }}" id="tab4">
 
         <h3>Surgical details</h3>
         @foreach ($past_surgeries as $psurgery)
-        <?php echo Form::open(array('class' => 'form-horizontal'));?>
+        <?php echo Form::model($psurgery, array('class' => 'form-horizontal'));?>
         <div class="well">
 
             <?php
-
             if (Session::get('alert_surgery_'.$psurgery->id)) {
                 echo '<div class="alert alert-success">'.Session::get('alert_surgery_'.$psurgery->id).'</div>';
             }
             ?>
-
-
             {{ View::make('surgery_form')
                 ->with('surgery', $psurgery)
                 ->with('show_outcome', true)
             }}
 
-            <?php echo Form::actions(array(
-                Button::primary_submit('Save changes', array('name'=>'surgerySave', 'value'=>$psurgery->id))
+	        {{ Form::hidden('surgerySave',$psurgery->id) }}
+	        {{ Form::submit('Save changes', array('class'=>'btn btn-primary')) }}
 
-            )); ?>
+
         </div> <!-- end well -->
         {{ Form::close() }}
         @endforeach
-
-
     </div>  <!-- end tab 4 -->
-
-  </div> <!-- end tab content>
-
-
-
-    @endsection
+  </div> <!-- end tab content-->
+@endsection

@@ -121,5 +121,8 @@ return array(
 	*/
 
 	'domain' => null,
+	
+	//added when upgrading to 4.1
+	'expire_on_close' => false
 
 );

@@ -32,53 +32,60 @@ class Surgery extends Eloquent
     );
 
 
-    //validation rules required from Person::validateNew. $surgeryComplete means post-op data is needed
-    public static function getValidateRules($input, $surgeryComplete=false) {
+    //validation rules required
+    //$surgeryComplete means post-op data is needed
+    public static function  getValidateRules($input, $surgeryComplete=false) {
         $rules = array();
-        $surgeryType = SurgeryType::find($input['surgerytype_id'])->first();
+	    $rules['surgerytype_id'] = 'required';
+	    $rules['biometry_left'] = 'numeric';
+	    $rules['biometry_right'] = 'numeric';
+	    $rules['outcome'] = 'in:' . implode(',',array_keys(Surgery::$outcomes));
+	    $rules['eyes'] = 'in:L,R,L&R|required';;
 
-        //set up blank rules array
-        foreach ($surgeryType->surgerydatatypes as $surgeryDataType) {
-            $rules[$surgeryDataType->name.'_left'] = '';
-            $rules[$surgeryDataType->name.'_right'] = '';
-        }
-
-        $rules['surgerytype_id'] = 'required';
-        $rules['biometry_left'] = 'numeric';
-        $rules['biometry_right'] = 'numeric';
-        $rules['outcome'] = 'in:' . implode(',',array_keys(Surgery::$outcomes));
-        $rules['eyes'] = 'in:L,R,L&R|required';
-
-        // if surgeryComplete set, then the outcome field is required
-        if (isset($input['surgeryComplete'])) {
-            $rules['outcome'] .= '|required';
-        }
-        if (isset($input['surgerytype_id']) && isset($input['eyes'])) {
-            if ($input['surgerytype_id']) {
-                foreach ($surgeryType->surgerydatatypes as $surgeryDataType) {
-                    if ($surgeryComplete || !$surgeryDataType->post_surgery) {
-                        if ($input['eyes'] == 'L') {
-                            $rules[$surgeryDataType->name . '_left'].= '|required';
-                        }
-                        if ($input['eyes'] == 'R') {
-                            $rules[$surgeryDataType->name . '_right'].= '|required';
-                        }
-                        if ($input['eyes'] == 'L&R') {
-                            $rules[$surgeryDataType->name . '_left'].= '|required';
-                            $rules[$surgeryDataType->name . '_right'].= '|required';
-                        }
-                        //remove extra | at beginning
-                        $rules[$surgeryDataType->name . '_right'] = trim($rules[$surgeryDataType->name . '_right'],'|');
-                        $rules[$surgeryDataType->name . '_left'] = trim($rules[$surgeryDataType->name . '_right'],'|');
+	    if (isset($input['surgerytype_id']) && $input['surgerytype_id']) {
+            $surgeryType = SurgeryType::find($input['surgerytype_id']);
 
 
-                    }
-                }
-            }
-        }
-        //remove empty rules
-        $rules = array_filter($rules);
-        return $rules;
+	        //set up blank rules array
+	        foreach ($surgeryType->surgerydatatypes as $surgeryDataType) {
+	            $rules[$surgeryDataType->name.'_left'] = '';
+	            $rules[$surgeryDataType->name.'_right'] = '';
+	        }
+
+
+
+	        // if surgeryComplete set, then the outcome field is required
+	        if (isset($input['surgeryComplete'])) {
+	            $rules['outcome'] .= '|required';
+	        }
+	        if (isset($input['surgerytype_id']) && isset($input['eyes'])) {
+	            if ($input['surgerytype_id']) {
+	                foreach ($surgeryType->surgerydatatypes as $surgeryDataType) {
+	                    if ($surgeryComplete || !$surgeryDataType->post_surgery) {
+	                        if ($input['eyes'] == 'L') {
+	                            $rules[$surgeryDataType->name . '_left'].= '|required';
+	                        }
+	                        if ($input['eyes'] == 'R') {
+	                            $rules[$surgeryDataType->name . '_right'].= '|required';
+	                        }
+	                        if ($input['eyes'] == 'L&R') {
+	                            $rules[$surgeryDataType->name . '_left'].= '|required';
+	                            $rules[$surgeryDataType->name . '_right'].= '|required';
+	                        }
+	                        //remove extra | at beginning
+	                        $rules[$surgeryDataType->name . '_right'] = trim($rules[$surgeryDataType->name . '_right'],'|');
+	                        $rules[$surgeryDataType->name . '_left'] = trim($rules[$surgeryDataType->name . '_left'],'|');
+
+
+	                    }
+	                }
+	            }
+	        }
+	        //remove empty rules
+	        $rules = array_filter($rules);
+
+		}
+	    return $rules;
     }
 
 
@@ -119,24 +126,34 @@ class Surgery extends Eloquent
 
         //now, update the surgery data
         foreach (Surgerydatatype::all() as $surgeryDataType) {
-            if (isset($input[$surgeryDataType->name.'_left'])) {
-                $surgeryData = new SurgeryData();
-                $surgeryData->eye = 'L';
-                $surgeryData->value = $input[$surgeryDataType->name.'_left'];
-                $surgeryData->surgery_data_type_id = $surgeryDataType->id;
-                $surgery->surgerydata()->save($surgeryData);
+            foreach (array('L','R') as $whichEye) {
+                $dataName = $surgeryDataType->name;
+                $dataName .= ($whichEye == 'L' ? '_left' : '_right');
+                $prevData = $surgery->surgerydata()
+                    ->where('surgery_data_type_id', '=', $surgeryDataType->id)
+                    ->where('eye', '=', $whichEye)
+                    ->first();
+                $newData = null;
+                if (isset($input[$dataName])) {
+                    if (!is_null($prevData)) { // update
+                        $prevData->value = $input[$dataName];
+                        $prevData->save();
+                    } else { // insert
+                        $newSurgery = new SurgeryData();
+                        $newSurgery->eye = $whichEye;
+                        $newSurgery->value = $input[$dataName];
+                        $newSurgery->surgery_data_type_id = $surgeryDataType->id;
+                        $surgery->surgerydata()->save($newSurgery);
+                    }
+                } else {
+                    if (!is_null($prevData)) { // delete
+                        $prevData->delete();
+                    }
+                }   // end $whichEye foreach
             }
-            if (isset($input[$surgeryDataType->name.'_right'])) {
-                $surgeryData = new SurgeryData();
-                $surgeryData->eye = 'R';
-                $surgeryData->value = $input[$surgeryDataType->name.'_right'];
-                $surgeryData->surgery_data_type_id = $surgeryDataType->id;
-                $surgery->surgerydata()->save($surgeryData);
-            }
-        }
-
+        }  // end $surgeryDataType foreach
         return $surgery->id;
-    }
+    }  // end function
 
 
     /**

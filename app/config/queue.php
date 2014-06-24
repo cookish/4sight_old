@@ -56,5 +56,10 @@ return array(
 		),
 
 	),
+	
+	// added when upgrading to 4.1
+	'failed' => array(
+        'database' => 'mysql', 'table' => 'failed_jobs',
+    ),
 
 );

@@ -7,13 +7,13 @@
 
 @section('content')
 <div class="row">
-    <div class="span6"><h1>Patient list</h1></div>
-    <div class="span6">
+    <div class=".col-sm-6"><h1>Patient list</h1></div>
+    <div class=".col-sm-6">
         <br/>
         <?php echo Form::open(array('url' => 'people/list', 'method' => 'GET', 'class' => 'form-search')); ?>
-        <div class="input-append">
+        <div class="input-group">
             <?php echo Form::text('search', null, array(
-                'class' => 'span12 search-query',
+                'class' => '.col-sm-12 search-query',
                 'style' => 'margin: 0 auto;',
                 'data-provide' => 'typeahead',
                 'data-items' => '4',
@@ -26,14 +26,14 @@
 </div>
 <div class="row">
     <?php if (isset($search)) { ?>
-        <div class="span12 alert alert-info">
+        <div class=".col-sm-12 alert alert-info">
             Showing all results with first name, surname or Hospital number containing "
             <strong>{{ $search; }}</strong>"</div>
     <?php } ?>
 </div>
 
 <div class="row">
-    <div class="span12">
+    <div class=".col-sm-12">
 
 
     <table class="table table-condensed table-striped table-hover">

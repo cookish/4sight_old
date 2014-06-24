@@ -16,34 +16,41 @@
 
 </head>
 <body>
-<?php
-echo Navbar::inverse(null, Navbar::FIX_TOP)
-    ->with_brand("St. John's Eye Clinic", '#')
-    ->with_menus(
-        Navigation::links(
-            array(
-                array('Home', URL::to('/'), (URL::current() == URL::to('/'))),
-                array('New', URL::to('people/add'), (strpos(URL::current(),'people/add'))),
-                array('Patients', URL::to('people/list'), (strpos(URL::current(),'people/list'))),
-                array('Schedule', URL::to('schedule/0'), (strpos(URL::current(),'schedule/'))),
-                array('Lists', URL::to('lists/0/today'), (strpos(URL::current(),'lists'))),
-            )
-        )
-    );
-?>
+	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#">St. John's Eye Clinic</a>
+			</div>
+			<div class="navbar-collapse collapse">
+				<ul class="nav navbar-nav">
+					<li {{ (URL::current() == URL::to('/') ? 'class="active"' : '') }}><a href="{{ URL::to('/') }}">Home</a></li>
+					<li {{ (strpos(URL::current(),'people/add') ? 'class="active"' : '') }}><a href="{{ URL::to('people/add') }}">New</a></li>
+					<li {{ (strpos(URL::current(),'people/list') ? 'class="active"' : '') }}><a href="{{ URL::to('people/list') }}">Patients</a></li>
+					<li {{ (strpos(URL::current(),'schedule/') ? 'class="active"' : '') }}><a href="{{ URL::to('schedule/') }}">Schedule</a></li>
+					<li {{ (strpos(URL::current(),'lists') ? 'class="active"' : '') }}><a href="{{ URL::to('lists/0/today') }}">Lists</a></li>
 
+				</ul>
+			</div>
+		</div>
+	</nav>
 
-    <div class="container-fluid">
-        <div class="row-fluid">
-            <div class="span2">
+	<div class="container">
+        <div class="row">
+            <div class=".col-sm-2">
                 @yield('sidebar')
             </div>
-            <div class="span8">
+            <div class=".col-sm-8">
                 @yield('content')
             </div>
         </div>
     </div>
-<!--    <script src="http://code.jquery.com/jquery.js"></script>-->
+    <script src="http://code.jquery.com/jquery.js"></script>
     <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
 </body>
 </html>

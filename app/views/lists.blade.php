@@ -104,7 +104,7 @@ if ($current_surgerytype == 0) {
 }
 ?>
 
-<p>{{ $explanation }}</p>
+{{ Typography::muted($explanation) }}
 
 <p>&nbsp;</p>
 <script src="/vendor/jquery/jquery.js"></script>

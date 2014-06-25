@@ -11,17 +11,19 @@
     <div class=".col-sm-6">
         <br/>
         <?php echo Form::open(array('url' => 'people/list', 'method' => 'GET', 'class' => 'form-search')); ?>
-        <div class="input-group">
+        <div class="input-group col-sm-2">
             <?php echo Form::text('search', null, array(
-                'class' => '.col-sm-12 search-query',
+                'class' => 'form-control',
                 'style' => 'margin: 0 auto;',
                 'data-provide' => 'typeahead',
                 'data-items' => '4',
                 'autocomplete' => 'off',
                 'data-source' => '["' . implode($typeahead, '","')  . '"]')); ?>
-            <?php echo Form::submit('Search', array('class' => 'btn')); ?>
+	        <span class="input-group-btn">
+            <?php echo Form::submit('Search', array('class' => 'btn btn-default')); ?>
         </div>
         <?php echo Form::close(); ?>
+	    <br>
     </div>
 </div>
 <div class="row">

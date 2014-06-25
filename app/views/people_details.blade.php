@@ -11,12 +11,11 @@ Patient details
 //Session::put('', array('date'=>'3'));
 //print_r(Session::all());
 ?>
-Patient:
-<h4>{{ $person->first_name }} {{ $person->surname }}</h4>
-<br>
+
+<h4>Patient: {{ $person->first_name }} {{ $person->surname }}</h4>
 <br>
 <div class="tabbable">
-<ul class="nav nav-pills">
+<ul class="nav nav-tabs">
     <?php
     $section = 'details';
     if (Input::old('surgerySave') || Input::old('surgeryComplete')) $section = 'surgery';

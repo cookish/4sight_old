@@ -109,7 +109,7 @@ return array(
         
         // 'Bootstrapper\BootstrapperServiceProvider',
 
-        'Former\FormerServiceProvider',
+//        'Former\FormerServiceProvider',
 
 	),
 
@@ -201,7 +201,7 @@ return array(
         // 'Typeahead'      => 'Bootstrapper\\Typeahead',
         // 'Typography'     => 'Bootstrapper\\Typography',
 
-        'Former' => 'Former\Facades\Former',
+//        'Former' => 'Former\Facades\Former',
 	),
 
 );

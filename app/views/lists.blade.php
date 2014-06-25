@@ -50,7 +50,7 @@
     'Age'
 );
 ?>
-{{ Table::striped_hover_condensed_open() }}
+<table class="table table-condensed table-striped table-hover">
 <thead>
 <tr class="">
     @foreach ($headers as $header)
@@ -87,7 +87,7 @@
     </tr>
 @endforeach
 
-{{ Table::close() }}
+</table>
 <?php echo $people->links(); ?>
 
 <?php
@@ -104,7 +104,7 @@ if ($current_surgerytype == 0) {
 }
 ?>
 
-{{ Typography::muted($explanation) }}
+<p class="text-muted">{{ $explanation }}</p>
 
 <p>&nbsp;</p>
 <script src="/vendor/jquery/jquery.js"></script>

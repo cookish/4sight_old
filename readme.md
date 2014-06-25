@@ -6,11 +6,11 @@ This is my first open source project - please let me know if I have done somethi
 
 ## Official Documentation
 
-Documentation can be found on the [wiki](wiki).
+Documentation can be found on the [wiki](http://github.com/cookish/4sight/wiki).
 
 ### Contributing to 4sight
 
-All issues and pull requests should be filed on the [laravel/framework](http://github.com/cookish/4sight) repository.
+All issues and pull requests should be filed on the [cookish/4sight](http://github.com/cookish/4sight) repository.
 
 ### License
 

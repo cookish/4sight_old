@@ -25,18 +25,23 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="#">St. John's Eye Clinic</a>
+				<a class="navbar-brand" href="{{ URL::to('/') }}">{{ HTML::image('images/4sight_logo.png','4sight', array('style'=>"max-width:80px; margin-top: -7px;")) }}</a>
 			</div>
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
-					<li {{ (URL::current() == URL::to('/') ? 'class="active"' : '') }}><a href="{{ URL::to('/') }}">Home</a></li>
 					<li {{ (strpos(URL::current(),'people/add') ? 'class="active"' : '') }}><a href="{{ URL::to('people/add') }}">New</a></li>
 					<li {{ (strpos(URL::current(),'people/list') ? 'class="active"' : '') }}><a href="{{ URL::to('people/list') }}">Patients</a></li>
 					<li {{ (strpos(URL::current(),'schedule/') ? 'class="active"' : '') }}><a href="{{ URL::to('schedule/') }}">Schedule</a></li>
 					<li {{ (strpos(URL::current(),'lists') ? 'class="active"' : '') }}><a href="{{ URL::to('lists/0/today') }}">Lists</a></li>
 
 				</ul>
+
+
 			</div>
+
+
+
+
 		</div>
 	</nav>
 

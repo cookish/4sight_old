@@ -66,7 +66,7 @@ return array(
 		'pgsql' => array(
 			'driver'   => 'pgsql',
 			'host'     => 'localhost',
-			'database' => 'stjohns',
+			'database' => '4sight',
 			'username' => 'martin',
 			'password' => 'martin',
 			'charset'  => 'utf8',

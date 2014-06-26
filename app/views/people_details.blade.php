@@ -12,7 +12,7 @@ Patient details
 //print_r(Session::all());
 ?>
 
-<h4>Patient: {{ $person->first_name }} {{ $person->surname }}</h4>
+<h4>{{ $person->first_name }} {{ $person->surname }} : {{ $person->hospital_number }} </h4>
 <br>
 <div class="tabbable">
 <ul class="nav nav-tabs">

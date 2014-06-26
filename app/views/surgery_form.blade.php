@@ -48,11 +48,6 @@ if ($all || in_array('eyes', $showFields)) {
 		->draw();
 }
 
-//ward
-if ($all || in_array('ward', $showFields)) {
-	form_display::make('text','ward')->errors($errors)->draw();
-}
-
 foreach (Surgerydatatype::all() as $surgeryDataType) {
     if ($all || in_array($surgeryDataType->name, $showFields)) {
         foreach (array("L", "R") as $whichEye) {
@@ -77,6 +72,10 @@ foreach (Surgerydatatype::all() as $surgeryDataType) {
     }
 }
 
+//ward
+if ($all || in_array('ward', $showFields)) {
+	form_display::make('text','ward')->errors($errors)->draw();
+}
 
 // surgery notes
 if ($all || in_array('surgery_notes', $showFields)) {

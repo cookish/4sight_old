@@ -8,31 +8,41 @@ Menu
 
 <div class="row"><div class=".col-sm-12"><h1>Menu</h1></div></div>
 
-<div class="row">&nbsp;</div>
-<div class="row">&nbsp;</div>
+
 
 <div class="row">
-    <div class="col-sm-2"><button class="btn btn-lg btn-primary" type="button" onclick="location.href='{{ URL::to('people/add') }}'">New patient</button></div>
-    <div class="col-sm-10">Create a new patient</div>
+	<h4>Patients</h4>
+	<dl class="dl-horizontal">
+		<dt><a href="{{ URL::to('people/add') }}'">New patient</a></dt><dd>Create a new patient</dd>
+		<dt><a href="{{ URL::to('people/list') }}'">Patient list</a></dt><dd>Find and list patients</dd>
+	</dl>
 </div>
-<div class="row">&nbsp;</div>
-
 <div class="row">
-    <div class="col-sm-2"><button class="btn btn-lg btn-primary" type="button" onclick="location.href='{{ URL::to('people/list') }}'">Patients</button></div>
-    <div class="col-sm-10">Search for patients by name, surname or hospital number</div>
+	<h4>Tasks</h4>
+	<dl class="dl-horizontal">
+		<dt><a href="#">Contact patients</a></dt><dd>List patients who need contacting for appointments or surgery</dd>
+		<dt><a href="#">Surgery outcomes</a></dt><dd>Indicate the outcome of surgeries that have been performed</dd>
+		<dt><a href="#">Appointment resolution</a></dt> <dd>Update the status of pre-op and post-op appointments</dd>
+	</dl>
 </div>
-<div class="row">&nbsp;</div>
-
 <div class="row">
-    <div class="col-sm-2"><button class="btn btn-lg btn-primary" type="button" onclick="location.href='{{ URL::to('schedule/0') }}'">Schedule </button></div>
-    <div class="col-sm-10">Schedule operations, pre-op and post-op appointments</div>
+	<h4>Info</h4>
+	<dl class="dl-horizontal">
+		<dt><a href="#">Surgery lists</a></dt><dd>Generate lists for surgery, pre-op and post-op</dd>
+		<dt><a href="#">Reports</a></dt><dd>Generate reports</dd>
+	</dl>
 </div>
-<div class="row">&nbsp;</div>
-
 <div class="row">
-    <div class="col-sm-2"><button class="btn btn-lg btn-primary" type="button" onclick="location.href='{{ URL::to('lists/0/today') }}'">Lists</button></div>
-    <div class="col-sm-10">View lists of patients categorised by operation type, and sorted according to urgency</div>
+	<h4>Other</h4>
+	<dl class="dl-horizontal">
+		<dt><a href="#">Schedule</a></dt><dd>Schedule surgeries for a day</dd>
+	</dl>
+	<dl class="dl-horizontal">
+		<dt><a href="#">Lens management</a></dt><dd>Manage lens stocks</dd>
+	</dl>
+	<dl class="dl-horizontal">
+		<dt><a href="#">Utilities</a></dt><dd>Various utilities</dd>
+	</dl>
 </div>
-<div class="row">&nbsp;</div>
-
+,
 @endsection

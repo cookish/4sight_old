@@ -25,23 +25,38 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="{{ URL::to('/') }}">{{ HTML::image('images/4sight_logo.png','4sight', array('style'=>"max-width:80px; margin-top: -7px;")) }}</a>
 			</div>
 			<div class="navbar-collapse collapse">
+
 				<ul class="nav navbar-nav">
-					<li {{ (strpos(URL::current(),'people/add') ? 'class="active"' : '') }}><a href="{{ URL::to('people/add') }}">New</a></li>
-					<li {{ (strpos(URL::current(),'people/list') ? 'class="active"' : '') }}><a href="{{ URL::to('people/list') }}">Patients</a></li>
+					<li><a class="navbar-brand" href="{{ URL::to('/') }}">{{ HTML::image('images/4sight_logo.png','4sight', array('style'=>"max-width:80px; margin-top: -7px;")) }}</a></li>
+					<li class="dropdown {{ (strpos(URL::current(),'people/') ? 'active' : '') }}">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Patients <b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li><a href="{{ URL::to('people/add') }}">New patient</a></li>
+							<li><a href="{{ URL::to('people/list') }}">Patient list</a></li>
+						</ul>
+					</li>
+					<li class="dropdown {{ (strpos(URL::current(),'tasks/') ? 'active' : '') }}">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="badge">176</span> Tasks <b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li><a href="#">Contact patients <span class="badge pull-right">6</span></a></li>
+							<li><a href="#">Surgery outcomes <span class="badge pull-right">42</span></a></li>
+							<li><a href="#">Appointment resolution <span class="badge">128</span></a></li>
+						</ul>
+					</li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Info <b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li><a href="{{ URL::to('lists/0/today') }}">Surgery lists</a></li>
+							<li><a href="#">Reports</a></li>
+						</ul>
+					</li>
 					<li {{ (strpos(URL::current(),'schedule/') ? 'class="active"' : '') }}><a href="{{ URL::to('schedule/') }}">Schedule</a></li>
-					<li {{ (strpos(URL::current(),'lists') ? 'class="active"' : '') }}><a href="{{ URL::to('lists/0/today') }}">Lists</a></li>
-
+					<li {{ (strpos(URL::current(),'lensmanagement/') ? 'class="active"' : '') }}><a href="#">Lens management</a></li>
+					<li {{ (strpos(URL::current(),'utilities/') ? 'class="active"' : '') }}><a href="#">Utilities</a></li>
 				</ul>
-
-
 			</div>
-
-
-
-
 		</div>
 	</nav>
 

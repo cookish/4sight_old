@@ -1,8 +1,8 @@
 <?php
+use Carbon\Carbon;
 
 class Person extends Eloquent
 {
-
 
     //relationship info
     public function appointments() {
@@ -12,6 +12,19 @@ class Person extends Eloquent
     public function surgeries() {
         return $this->hasMany('Surgery');
     }
+
+	public function getAge() {
+		if (!$this->date_of_birth) {
+			return NULL;
+		} else {
+			$tz  = new DateTimeZone('Africa/Johannesburg');
+			$age = DateTime::createFromFormat('Y-m-d', $this->date_of_birth, $tz)
+				->diff(new DateTime('now', $tz))
+				->y;
+			return intval($age);
+		}
+
+	}
 
     //info for displaying a person form
     public static $formFields = array(
@@ -31,8 +44,7 @@ class Person extends Eloquent
 
 
 
-
-    /**
+	/**
      * Returns people matching name, surname or hospital number
      */
     public static function personSearch($search_string = null, $orderby = null) {
@@ -89,6 +101,54 @@ class Person extends Eloquent
                 ->orderBy('date_booked', 'asc');
         return $ret;
     }
+
+
+	public static function getSurgeryList($date = NULL, $ward = '') {
+		if (is_null($date)) {
+			$date = Carbon::parse('now');
+		}
+		$start = Carbon::parse($date)->hour(0)->minute(0)->second(0);
+		$end = Carbon::parse($date)->hour(23)->minute(59)->second(59);
+
+		if ($ward == '') {
+			return Person::with('surgeries')
+				->whereHas('surgeries',function($query) use ($date, $start, $end)
+				{
+					$query->whereBetween('date', [$start, $end]);
+				});
+		} else {
+			return Person::with('surgeries')
+				->whereHas('surgeries',function($query) use ($ward, $date, $start, $end)
+				{
+				$query->whereBetween('date', [$start, $end])
+						->where('ward', '=', $ward);
+				});
+		}
+//		return Person::with($withArray);
+//		return Person::where('person_id', '=', 1);
+	}
+
+	public static function getAppointmentList($appointmenttype_id, $date = NULL) {
+		if (is_null($date)) {
+			$date = new DateTime();
+		}
+
+		return Person::with(array('surgeries','appointments'))
+			->whereHas('appointments', function($query) use ($appointmenttype_id, $date)
+			{
+				$query->where('date', '=', $date)->where('appointmenttype_id', '=', $appointmenttype_id);
+			});
+	}
+
+
+	/**
+	 * @param Person $people
+	 */
+	public static function orderByPriority($people) {
+		return $people
+			->orderBy('grade', 'ASC NULLS LAST')
+			->orderBy('date_booked', 'asc');
+	}
 
     public static function getValidateRules() {
         $rules = array(

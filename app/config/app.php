@@ -67,6 +67,9 @@ return array(
 
 	'key' => '0gnMvAL9PXRLyoL7zzT2zzRhHj5WuGGl',
 
+	// this suggested by Laravel page to update from 4.1.* to 4.2.*
+	'cipher' => MCRYPT_RIJNDAEL_256,
+
 	/*
 	|--------------------------------------------------------------------------
 	| Autoloaded Service Providers

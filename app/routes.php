@@ -41,12 +41,14 @@ Route::get('people/list', 'PeopleController@listPeople');
 Route::controller('people', 'PeopleController');
 
 Route::get('schedule/{surgerytype}/{date?}', 'ScheduleController@getSchedule');
-Route::get('lists/{surgerytype}/{list}', 'ListsController@getList');
+Route::any('lists/{type?}', 'ListsController@listsGetPost');
+//Route::post('lists/{type?}', 'ListsController@listsPost');
 
 Route::get('/', function()
 {
     return View::make('index');
 });
+
 
 
 /*

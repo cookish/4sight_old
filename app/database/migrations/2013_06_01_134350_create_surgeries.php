@@ -37,6 +37,7 @@ class CreateSurgeries extends Migration {
 
             $table->string('surgery_notes', 64)->nullable();
             $table->string('ward', 20)->nullable();
+	        $table->string('theatre', 20)->nullable();
             $table->string('outcome', 12)->nullable();
 
             // created_at | updated_at DATETIME
@@ -84,7 +85,19 @@ class CreateSurgeries extends Migration {
             $table->timestamps();
         });
 
+		//options for surgerydatatypes
+	    Schema::create('surgerydatatypeoptions', function($table) {
+		    // auto incremental id (PK)
+		    $table->increments('id');
+		    $table->integer('surgerydatatype_id');
+		    $table->foreign('surgerydatatype_id')->references('id')->on('surgerydatatypes')->on_update('cascade');
+		    $table->string('value', 32);
+		    $table->integer('listorder');
 
+
+		    // created_at | updated_at DATETIME
+		    $table->timestamps();
+	    });
 
     }
 
@@ -95,6 +108,7 @@ class CreateSurgeries extends Migration {
      */
     public function down()
     {
+	    Schema::drop('surgerydatatypeoptions');
         Schema::drop('surgerydataneeded');
         Schema::drop('surgerydata');
         Schema::drop('surgeries');

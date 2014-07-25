@@ -6,105 +6,90 @@
 
 
 @section('content')
-
 <!--navigation bar-->
-<?php $options = array(
-        'today' => 'Today',
-        'scheduled' => 'Scheduled',
-        'notscheduled' => 'Not yet scheduled',
-    );?>
-<ul class="nav nav-pills">
-    @foreach ($options as $option => $string)
-        <li{{ ($current_list == $option) ? ' class="active"' : '' }}>
-            <a href="{{ URL::to('lists/' . $current_surgerytype . '/' . $option)}}">
-                &nbsp;&nbsp;&nbsp;&nbsp;{{ $string }}&nbsp;&nbsp;&nbsp;&nbsp;</a>
-        </li>
-    @endforeach
-    <li class="dropdown active">
-        <a class="dropdown-toggle"
-           data-toggle="dropdown"
-           href="#">
-            Surgery: {{ $surgeryTypeArray[$current_surgerytype] }}
-            <b class="caret"></b>
-        </a>
-        <ul class="dropdown-menu">
-            @foreach ($surgeryTypeArray as $id => $surgeryType)
-            <li{{ ($current_surgerytype == $id) ? ' class="active"' : '' }}>
-                <a href="{{URL::to('lists/' . $id . '/' . $current_list)}}">&nbsp;&nbsp;&nbsp;&nbsp;{{$surgeryType}}&nbsp;&nbsp;&nbsp;&nbsp;</a>
-            </li>
-            @endforeach
-        </ul>
-    </li>
+<ul class="nav nav-tabs" role="tablist">
+		<li {{ ($currentList == 'surgery' ? 'class = "active"' : '') }}><a href="{{ URL::to('/lists/surgery/') }}">Surgery</a></li>
+@foreach (Appointmenttype::all() as $appointmentType)
+	<li {{ ($currentList == $appointmentType->id ? 'class = "active"' : '') }}><a href="{{ URL::to('/lists/' . $appointmentType->id . '/') }}">{{ $appointmentType->name }}</a></li>
+@endforeach
 </ul>
 
-<?php $headers = array(
-    'Type',
-    'Surgery date',
-    'First name',
-    'Surname',
-    'Hospital',
-    'Grade',
-    'Date booked',
-    'Pre-op date',
-    'Post-op date',
-    'Age'
-);
-?>
+
+
+
+
+<div class="row">&nbsp;</div>
+{{ Form::model(NULL, array('class'=>'form-inline', 'role'=>'form')) }}
+	<div class="form-group">
+		<label for="listDate">Date: </label>
+		<input type="text" class="form-control" id="listDate" style="width: 120px;" name="listDate" value="{{ $listDate }}">
+	</div>
+	&nbsp;&nbsp;&nbsp;
+	<div class="form-group">
+		<label for="theatre">Theatre: </label>
+		<select class="form-control" style="width: 100px;" id="theatre" name="theatre">
+			@foreach ($theatres as $theatreOption)
+				<option value="{{ $theatreOption }}"
+					<?php if ($theatreOption == $theatre) echo 'selected="selected"'; ?> >
+					{{ $theatreOption }}
+				</option>
+			@endforeach
+		</select>
+	</div>
+	&nbsp;&nbsp;&nbsp;
+
+	<button class="btn btn-primary">Go</button>
+
+{{ Form::close() }}
+<div class="row">&nbsp;</div>
+
+<?php $theatreName = ($theatre == 'All' ? 'all theatres' : $theatre); ?>
+<p class="bg-info col-sm-4">
+	<strong>{{ $currentListName }}</strong> list
+	@if ($currentList == 'surgery')
+		for <strong>{{ $theatreName }}</strong>
+	@endif
+	on <strong>{{ $listDate }}</strong>
+</p>
+
 <table class="table table-condensed table-striped table-hover">
 <thead>
-<tr class="">
-    @foreach ($headers as $header)
-        <th>{{ $header }}</th>
-    @endforeach
-</tr>
+	<tr class="">
+		<?php if ($theatre == 'All' && $currentList == 'surgery') echo '<th>Theatre</th>'; ?>
+		<th>Name</th>
+		<th>Hospital</th>
+		<th>Age</th>
+		<th>Gender</th>
+		<th>Surgery type</th>
+		<th>Eye</th>
+		<th>Biometry</th>
+		<th>Ward</th>
+		<th>Contact</th>
+	</tr>
 </thead>
 
 
 @foreach ($people as $person)
-    <?php
-    //calculate age
-    $age = '';
-    if ($person->date_of_birth) {
-        $tz  = new DateTimeZone('Africa/Johannesburg');
-        $age = DateTime::createFromFormat('Y-m-d', $person->date_of_birth, $tz)
-                ->diff(new DateTime('now', $tz))
-                ->y;
-        if ($age >= 60) $age .= ' (SNR)';
-    }
-    ?>
-
     <tr id="{{ $person->id }}" class="">
-    <td>{{ $person->surgerytype_id }}</td>
-    <td>{{ $person->date }}</td>
-    <td>{{ $person->first_name }}</td>
-    <td>{{ $person->surname }}</td>
-    <td>{{ $person->hospital_number }}</td>
-    <td>{{ $person->grade }}</td>
-    <td>{{ $person->date_booked }}</td>
-    <td>{{ $person->preop_date }}</td>
-    <td>{{ $person->postop_date }}</td>
-    <td>{{ $age }}</td>
+	    <?php if ($theatre == 'All') echo '<td>' . $person->surgeries()->first()->theatre. '</td>'; ?>
+        <td>{{ $person->first_name }} {{ $person->surname }} </td>
+        <td>{{ $person->hospital_number }}</td>
+        <td>{{ $person->getAge() }}</td>
+        <td>{{ $person->gender }}</td>
+        <td>{{ $person->surgeries
+	        ->first()
+	        ->surgerytype
+	        ->name }}</td>
+        <td>{{ $person->surgeries()->first()->eyes }}</td>
+        <td></td>
+	    <td>{{ $person->surgeries->first()->ward }}</td>
+	    <td>{{ $person->phone1 }}</td>
+
     </tr>
 @endforeach
 
 </table>
 <?php echo $people->links(); ?>
-
-<?php
-$explanations = array(
-        'today' => 'The above table shows all patients scheduled for today, sorted by priority',
-        'scheduled' => 'The above table shows all patients who have a scheduled surgery, sorted by surgery date then priority',
-        'notscheduled' => 'The above table shows all patients who do not yet have a surgery date, sorted by priority',
-    );
-if ($current_surgerytype == 0) {
-    $explanation = $explanations[$current_list].'.';
-} else {
-    $explanation = $explanations[$current_list]
-        .', who need to undergo surgery of type "' . $surgeryTypeArray[$current_surgerytype]. '".';
-}
-?>
-
-<p class="text-muted">{{ $explanation }}</p>
 
 <p>&nbsp;</p>
 <script src="/vendor/jquery/jquery.js"></script>
@@ -114,6 +99,11 @@ if ($current_surgerytype == 0) {
             // alert($(this).attr('id')); //trying to alert id of the clicked row
             window.location = '{{ URL::to('people/'); }}' + '/' +  $(this).attr("id");
         });
+	    $('#listDate').datepicker({
+		    format: "yyyy-mm-dd",
+		    todayBtn: "linked",
+		    todayHighlight: true
+	    });
     });
 </script>
 @endsection

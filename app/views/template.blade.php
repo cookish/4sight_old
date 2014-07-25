@@ -41,7 +41,6 @@
 					<li class="dropdown {{ (strpos(URL::current(),'tasks/') ? 'active' : '') }}">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="badge">176</span> Tasks <b class="caret"></b></a>
 						<ul class="dropdown-menu">
-							<li><a href="#">Contact patients <span class="badge pull-right">6</span></a></li>
 							<li><a href="#">Surgery outcomes <span class="badge pull-right">42</span></a></li>
 							<li><a href="#">Appointment resolution <span class="badge">128</span></a></li>
 						</ul>

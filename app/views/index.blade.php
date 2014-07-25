@@ -20,7 +20,6 @@ Menu
 <div class="row">
 	<h4>Tasks</h4>
 	<dl class="dl-horizontal">
-		<dt><a href="#">Contact patients</a></dt><dd>List patients who need contacting for appointments or surgery</dd>
 		<dt><a href="#">Surgery outcomes</a></dt><dd>Indicate the outcome of surgeries that have been performed</dd>
 		<dt><a href="#">Appointment resolution</a></dt> <dd>Update the status of pre-op and post-op appointments</dd>
 	</dl>

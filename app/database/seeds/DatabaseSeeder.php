@@ -41,6 +41,7 @@ class PeopleTableSeeder extends Seeder {
         Surgerydatatype::create(array('name' => 'biometry', 'label' => 'Biometry', 'post_surgery'=>false));
         Surgerydatatype::create(array('name' => 'histological_outcome',
             'label' => 'Histological outcome', 'post_surgery'=>true));
+//	    Surgerydatatype::create(array('name' => 'seniority', 'label' => 'Seniority', 'post_surgery'=>false));
 
         Surgerytype::create(array('name'=>'P+I'));
         Surgerytype::create(array('name'=>'E+I'));
@@ -64,6 +65,34 @@ class PeopleTableSeeder extends Seeder {
         //add hist and VA to Other Extra-ocular Procedures
         $surgeryType = Surgerytype::where('name', '=',  'Other Extra-ocular Procedures')->first();
         $surgeryType->surgerydatatypes()->sync(array(1,2,4));
+
+
+	    /* --------------------- Add options for surgerydatatypes --------- */
+	    $possibleVAs = array('6/5', '6/6', '6/12', '6/18', '6/36', '6/60', '6/120', 'CF', 'HM', 'LP', 'NLP');
+
+	    $surgerydatatype_id = SurgeryDataType::where('name', '=',  'pre_op_va')->first()->id;
+	    foreach ($possibleVAs as $key => $VAValue) {
+		    SurgeryDataTypeOption::create(array(
+				    'surgerydatatype_id'=>$surgerydatatype_id,
+				    'value'=>$VAValue,
+				    'listorder' => $key)
+		    );
+	    }
+
+	    $surgerydatatype_id = SurgeryDataType::where('name', '=',  'post_op_va')->first()->id;
+	    foreach ($possibleVAs as $key => $VAValue) {
+		    SurgeryDataTypeOption::create(array(
+				    'surgerydatatype_id'=>$surgerydatatype_id,
+				    'value'=>$VAValue,
+				    'listorder' => $key)
+		    );
+	    }
+
+
+	    // add seniority to 1st 4 types
+//	    $surgeryType = Surgerytype::whereIn('name', array('P+I', 'E+I', 'Secondary IOL', 'Other Intra-ocular Procedures'))->get();
+//	    $surgeryType->surgerydatatypes()->sync(array(5));
+
 
         /* -------------------- Add seed data ------------------------- */
         // seed data

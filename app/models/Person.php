@@ -103,14 +103,12 @@ class Person extends Eloquent
     }
 
 
-	public static function getSurgeryList($date = NULL, $ward = '') {
-		if (is_null($date)) {
-			$date = Carbon::parse('now');
-		}
+	public static function getSurgeryList($date, $theatre) {
+
 		$start = Carbon::parse($date)->hour(0)->minute(0)->second(0);
 		$end = Carbon::parse($date)->hour(23)->minute(59)->second(59);
 
-		if ($ward == '') {
+		if ($theatre == 'All') {
 			return Person::with('surgeries')
 				->whereHas('surgeries',function($query) use ($date, $start, $end)
 				{
@@ -118,10 +116,10 @@ class Person extends Eloquent
 				});
 		} else {
 			return Person::with('surgeries')
-				->whereHas('surgeries',function($query) use ($ward, $date, $start, $end)
+				->whereHas('surgeries',function($query) use ($theatre, $date, $start, $end)
 				{
 				$query->whereBetween('date', [$start, $end])
-						->where('ward', '=', $ward);
+						->where('theatre', '=', $theatre);
 				});
 		}
 //		return Person::with($withArray);

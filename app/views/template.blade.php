@@ -8,6 +8,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title')</title>
+	<link href="/vendor/bootstrap-datepicker/css/datepicker3.css" rel="stylesheet" type="text/css" />
     <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link href="/css/override.css" rel="stylesheet" media="screen">
     <style>
@@ -48,7 +49,7 @@
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Info <b class="caret"></b></a>
 						<ul class="dropdown-menu">
-							<li><a href="{{ URL::to('lists/0/today') }}">Surgery lists</a></li>
+							<li><a href="{{ URL::to('lists') }}">Surgery lists</a></li>
 							<li><a href="#">Reports</a></li>
 						</ul>
 					</li>
@@ -70,8 +71,9 @@
 <!--            </div>-->
         </div>
     </div>
-    <script src="http://code.jquery.com/jquery.js"></script>
+	<script src="http://code.jquery.com/jquery.js"></script>
     <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script src="/vendor/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
 </body>
 </html>
 

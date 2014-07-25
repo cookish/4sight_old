@@ -13,8 +13,8 @@ Menu
 <div class="row">
 	<h4>Patients</h4>
 	<dl class="dl-horizontal">
-		<dt><a href="{{ URL::to('people/add') }}'">New patient</a></dt><dd>Create a new patient</dd>
-		<dt><a href="{{ URL::to('people/list') }}'">Patient list</a></dt><dd>Find and list patients</dd>
+		<dt><a href="{{ URL::to('people/add') }}">New patient</a></dt><dd>Create a new patient</dd>
+		<dt><a href="{{ URL::to('people/list') }}">Patient list</a></dt><dd>Find and list patients</dd>
 	</dl>
 </div>
 <div class="row">
@@ -28,7 +28,7 @@ Menu
 <div class="row">
 	<h4>Info</h4>
 	<dl class="dl-horizontal">
-		<dt><a href="#">Surgery lists</a></dt><dd>Generate lists for surgery, pre-op and post-op</dd>
+		<dt><a href="{{ URL::to('lists') }}">Surgery lists</a></dt><dd>Generate lists for surgery, pre-op and post-op</dd>
 		<dt><a href="#">Reports</a></dt><dd>Generate reports</dd>
 	</dl>
 </div>

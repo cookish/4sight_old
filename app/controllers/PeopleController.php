@@ -2,6 +2,13 @@
 
 class PeopleController extends BaseController {
 
+    public function getScripts()
+    {
+        return array(
+            'lib/people/people.js',
+        );
+    }
+
     /**
      * Form has been submitted
      *
@@ -55,7 +62,11 @@ class PeopleController extends BaseController {
         $orderby = array(array('surname', 'asc'), array('first_name', 'asc'));
         $view = View::make('people_list')
             ->with('people', Person::personSearch($search, $orderby)->paginate(20))
-            ->with('typeahead', $typeahead);
+            ->with('typeahead', $typeahead)
+            ->with(
+                array('scripts' => $this->getScripts())
+            );
+
         if ($search) {
             return $view->with('search', $search);
         } else {

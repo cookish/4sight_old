@@ -26,7 +26,7 @@ return array(
 	|
 	*/
 
-	'default' => 'pgsql',
+	'default' => 'mysql',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -55,9 +55,9 @@ return array(
 		'mysql' => array(
 			'driver'    => 'mysql',
 			'host'      => 'localhost',
-			'database'  => 'database',
-			'username'  => 'root',
-			'password'  => '',
+			'database'  => '4sight',
+			'username'  => 'sam',
+			'password'  => 'lock24',
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',
 			'prefix'    => '',

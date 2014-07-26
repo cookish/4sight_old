@@ -25,10 +25,8 @@ class CreateAppointments extends Migration {
             // auto incremental id (PK)
             $table->increments('id');
 
-            $table->integer('appointmenttype_id')->unsigned();
-            $table->foreign('appointmenttype_id')->references('id')->on('appointmenttypes')->on_update('cascade');
-            $table->integer('person_id')->unsigned();
-            $table->foreign('person_id')->references('id')->on('people')->on_update('cascade');
+            $table->integer('appointmenttype_id')->unsigned()->references('id')->on('appointmenttypes');
+            $table->integer('person_id')->unsigned()->references('id')->on('people');
             $table->date('date');
             $table->string('notes', 512)->nullable();
 

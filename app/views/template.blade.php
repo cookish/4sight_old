@@ -70,9 +70,20 @@
 <!--            </div>-->
         </div>
     </div>
-	<script src="http://code.jquery.com/jquery.js"></script>
-    <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
-	<script src="/vendor/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+    <script type="text/javascript">
+        var URL = '<?php echo Request::root(); ?>';
+    </script>
+    <script type="text/javascript" src="<?php echo URL::asset('vendor/jquery/jquery-1.8.2.min.js'); ?>"></script>
+    <script type="text/javascript" src="<?php echo URL::asset('vendor/bootstrap/js/bootstrap.min.js'); ?>"></script>
+    <script type="text/javascript" src="<?php echo URL::asset('vendor/bootstrap-datepicker/js/bootstrap-datepicker.js'); ?>"></script>
+    <?php
+    if (isset($scripts) === true):
+    foreach ($scripts as $script): ?>
+        <script type="text/javascript" src="<?php echo URL::asset($script); ?>"></script>
+    <?php
+    endforeach;
+    endif;
+    ?>
 </body>
 </html>
 

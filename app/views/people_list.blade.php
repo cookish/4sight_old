@@ -66,15 +66,4 @@
     </div>
 </div>
 
-<!--<script src="http://code.jquery.com/jquery.js"></script>-->
-<script src="/vendor/jquery/jquery.js"></script>
-<script>
-    $(document).ready(function () {
-        $('.table tr:not(:first)').click(function (event) {
-            // alert($(this).attr('id')); //trying to alert id of the clicked row
-            window.location = '{{ URL::to('people/'); }}' + '/' +  $(this).attr("id");
-        });
-    });
-</script>
-
 @endsection

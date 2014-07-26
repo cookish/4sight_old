@@ -25,10 +25,8 @@ class CreateSurgeries extends Migration {
         Schema::create('surgeries', function($table) {
             // auto incremental id (PK)
             $table->increments('id');
-            $table->integer('person_id');
-            $table->foreign('person_id')->references('id')->on('people')->on_update('cascade');
-            $table->integer('surgerytype_id')->unsigned();
-            $table->foreign('surgerytype_id')->references('id')->on('surgerytypes')->on_update('cascade');
+            $table->integer('person_id')->unsigned()->references('id')->on('people');
+            $table->integer('surgerytype_id')->unsigned()->references('id')->on('surgerytypes');
 
             $table->date('date')->nullable();
             $table->boolean('completed')->default(false);
@@ -61,10 +59,8 @@ class CreateSurgeries extends Migration {
         Schema::create('surgerydataneeded', function($table) {
             // auto incremental id (PK)
             $table->increments('id');
-            $table->integer('surgery_data_type_id');
-            $table->foreign('surgery_data_type_id')->references('id')->on('surgerydatatypes')->on_update('cascade');
-            $table->integer('surgery_type_id');
-            $table->foreign('surgery_type_id')->references('id')->on('surgerytypes')->on_update('cascade');
+            $table->integer('surgery_data_type_id')->unsigned()->references('id')->on('surgerydatatypes');
+            $table->integer('surgery_type_id')->unsigned()->references('id')->on('surgerytypes');
 
             // created_at | updated_at DATETIME
 //            $table->timestamps();
@@ -74,10 +70,8 @@ class CreateSurgeries extends Migration {
         Schema::create('surgerydata', function($table) {
             // auto incremental id (PK)
             $table->increments('id');
-            $table->integer('surgery_id');
-            $table->foreign('surgery_id')->references('id')->on('surgeries')->on_update('cascade');
-            $table->integer('surgery_data_type_id');
-            $table->foreign('surgery_data_type_id')->references('id')->on('surgerydatatypes')->on_update('cascade');
+            $table->integer('surgery_id')->unsigned()->references('id')->on('surgeries');
+            $table->integer('surgery_data_type_id')->unsigned()->references('id')->on('surgerydatatypes');
             $table->string('value', 128);
             $table->string('eye', 1);
 
@@ -89,8 +83,7 @@ class CreateSurgeries extends Migration {
 	    Schema::create('surgerydatatypeoptions', function($table) {
 		    // auto incremental id (PK)
 		    $table->increments('id');
-		    $table->integer('surgerydatatype_id');
-		    $table->foreign('surgerydatatype_id')->references('id')->on('surgerydatatypes')->on_update('cascade');
+		    $table->integer('surgerydatatype_id')->unsigned()->references('id')->on('surgerydatatypes');
 		    $table->string('value', 32);
 		    $table->integer('listorder');
 

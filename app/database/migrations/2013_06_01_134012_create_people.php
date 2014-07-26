@@ -29,6 +29,8 @@ class CreatePeople extends Migration {
             $table->string('contact_history', 512)->nullable();
             $table->string('cancellation_notes', 512)->nullable();
 
+	        $table->string('ward', 20)->nullable();
+
 
             // created_at | updated_at DATETIME
             $table->timestamps();

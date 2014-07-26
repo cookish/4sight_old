@@ -5,8 +5,8 @@ class Person extends Eloquent
 {
 
     //relationship info
-    public function appointments() {
-        return $this->hasMany('Appointment');
+    public function bookings() {
+        return $this->hasMany('Booking');
     }
 
     public function surgeries() {
@@ -63,44 +63,7 @@ class Person extends Eloquent
         return $ret;
     }
 
-    /**
-     * @param null $surgerytype The name of the surgery
-     */
-    public static function priorityList($surgerytype_id = null, $scheduled = 'today') {
-        $ret = DB::table('people')
-                ->select(DB::raw("*,
-                        (select date from appointments
-                            join appointmenttypes on (appointments.appointmenttype_id = appointmenttypes.id)
-                            where person_id = people.id and appointmenttypes.name = 'Pre-op' order by date asc limit 1)
-                        as preop_date,
-                        (select date from appointments
-                            join appointmenttypes on (appointments.appointmenttype_id = appointmenttypes.id)
-                            where person_id = people.id and appointmenttypes.name = 'Post-op' order by date asc limit 1)
-                        as postop_date"))
-//                ->select(DB::raw("(select date from appointments
-//                        join appointmenttypes on (appointments.appointmenttype_id = appointmenttypes.id)
-//                        where person_id = people.id and appointmenttypes.name = 'preop' order by date asc limit 1) as
-//                        preop_date"))
-                ->join('surgeries', 'surgeries.person_id', '=', 'people.id')
-                ->whereNull('outcome');
-        if ($surgerytype_id) {
-            $ret = $ret->where('surgerytype_id', '=', $surgerytype_id);
-        }
-        if ($scheduled == 'today') {
-            $ret = $ret->where('surgeries.date', '=', DB::raw('now()::date'));
-        } elseif ($scheduled == 'scheduled') {
-            $ret = $ret->whereNotNull('surgeries.date')
-                    ->orderBy('date');  //order by date of op, then priority
-        } elseif ($scheduled == 'notscheduled') {
-            $ret = $ret->whereNull('surgeries.date');
-        }
 
-        //order by priority
-        $ret = $ret
-                ->orderBy('grade', 'ASC NULLS LAST')
-                ->orderBy('date_booked', 'asc');
-        return $ret;
-    }
 
 
 	public static function getSurgeryList($date, $theatre) {
@@ -126,15 +89,15 @@ class Person extends Eloquent
 //		return Person::where('person_id', '=', 1);
 	}
 
-	public static function getAppointmentList($appointmenttype_id, $date = NULL) {
+	public static function getBookingList($booking_type_id, $date = NULL) {
 		if (is_null($date)) {
 			$date = new DateTime();
 		}
 
 		return Person::with(array('surgeries','appointments'))
-			->whereHas('appointments', function($query) use ($appointmenttype_id, $date)
+			->whereHas('bookings', function($query) use ($booking_type_id, $date)
 			{
-				$query->where('date', '=', $date)->where('appointmenttype_id', '=', $appointmenttype_id);
+				$query->where('date', '=', $date)->where('booking_type_id', '=', $booking_type_id);
 			});
 	}
 

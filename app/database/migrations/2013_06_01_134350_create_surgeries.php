@@ -26,23 +26,21 @@ class CreateSurgeries extends Migration {
             // auto incremental id (PK)
             $table->increments('id');
             $table->integer('person_id')->unsigned()->references('id')->on('people');
-            $table->integer('surgerytype_id')->unsigned()->references('id')->on('surgerytypes');
+//            $table->integer('surgerytype_id')->unsigned()->references('id')->on('surgerytypes');
 
-            $table->date('date')->nullable();
-            $table->boolean('completed')->default(false);
-            $table->string('eyes', 5)->nullable();
+//            $table->date('date')->nullable();
+            $table->enum('status', ['awaiting', 'completed', 'cancelled']);
+            $table->enum('eye', ['L', 'R']);
 
 
-            $table->string('surgery_notes', 64)->nullable();
-            $table->string('ward', 20)->nullable();
-	        $table->string('theatre', 20)->nullable();
-            $table->string('outcome', 12)->nullable();
+            $table->text('notes')->nullable();
+
 
             // created_at | updated_at DATETIME
             $table->timestamps();
         });
 
-        Schema::create('surgerydatatypes', function($table) {
+        Schema::create('procedure_data_types', function($table) {
             // auto incremental id (PK)
             $table->increments('id');
             $table->string('name', 32);
@@ -56,34 +54,34 @@ class CreateSurgeries extends Migration {
         });
 
         //pivot table for many-to-many relationship between surgerytypes and surgerydatatypes
-        Schema::create('surgerydataneeded', function($table) {
+        Schema::create('procedure_data_type_procedure_type', function($table) {
             // auto incremental id (PK)
             $table->increments('id');
-            $table->integer('surgery_data_type_id')->unsigned()->references('id')->on('surgerydatatypes');
-            $table->integer('surgery_type_id')->unsigned()->references('id')->on('surgerytypes');
+            $table->integer('procedure_data_type_id')->unsigned()->references('id')->on('procedure_data_types');
+            $table->integer('procedure_type_id')->unsigned()->references('id')->on('procedure_types');
 
             // created_at | updated_at DATETIME
 //            $table->timestamps();
         });
 
         //pivot table for many-to-many relationship between surgerydatatypes and surgeries
-        Schema::create('surgerydata', function($table) {
+        Schema::create('procedure_procedure_data_type', function($table) {
             // auto incremental id (PK)
             $table->increments('id');
-            $table->integer('surgery_id')->unsigned()->references('id')->on('surgeries');
-            $table->integer('surgery_data_type_id')->unsigned()->references('id')->on('surgerydatatypes');
+            $table->integer('procedure_id')->unsigned()->references('id')->on('procedures');
+            $table->integer('procedure_data_type_id')->unsigned()->references('id')->on('procedure_data_types');
             $table->string('value', 128);
-            $table->string('eye', 1);
 
             // created_at | updated_at DATETIME
             $table->timestamps();
         });
 
 		//options for surgerydatatypes
-	    Schema::create('surgerydatatypeoptions', function($table) {
+//	    Schema::create('surgerydatatypeoptions', function($table) {
+	    Schema::create('procedure_data_type_options', function($table) {
 		    // auto incremental id (PK)
 		    $table->increments('id');
-		    $table->integer('surgerydatatype_id')->unsigned()->references('id')->on('surgerydatatypes');
+		    $table->integer('procedure_data_type_id')->unsigned()->references('id')->on('procedure_data_types');
 		    $table->string('value', 32);
 		    $table->integer('listorder');
 
@@ -101,12 +99,12 @@ class CreateSurgeries extends Migration {
      */
     public function down()
     {
-	    Schema::drop('surgerydatatypeoptions');
-        Schema::drop('surgerydataneeded');
-        Schema::drop('surgerydata');
-        Schema::drop('surgeries');
+	    Schema::drop('procedure_data_type_options');
+	    Schema::drop('procedure_procedure_data_type');
+        Schema::drop('procedure_data_type_procedure_type');
+        Schema::drop('procedure_data_types');
+	    Schema::drop('surgeries');
         Schema::drop('surgerytypes');
-        Schema::drop('surgerydatatypes');
 
     }
 

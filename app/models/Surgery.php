@@ -7,46 +7,23 @@ class Surgery extends Eloquent
         return $this->belongsTo('Person');
     }
 
-    public function surgerytype() {
-        return $this->belongsTo('Surgerytype');
-    }
+	public function procedures() {
+		return $this->hasMany('Procedure');
+	}
 
-    public function surgerydata() {
-        return $this->hasMany('Surgerydata');
-    }
 
-	public static $formFields = array(
+    public static $formFields = array(
         'surgerytype_id',
-        'date',
         'completed',
         'eyes',
-        'ward',
         'surgery_notes',
         'outcome'
     );
 
-    public static $outcomes = array(
-        'completed'=>'Completed',
-        'cancelled'=>'Cancelled',
-        'complicated'=>'Complicated'
-    );
-
-	public static $wards = array(
-		'A and B',
-		'C and D',
-		'D/S'
-	);
-
-	public static $theatres = array(
-		'Theatre 1',
-		'Theatre 2',
-		'Theatre 3'
-	);
-
 
     //validation rules required
     //$surgeryComplete means post-op data is needed
-    public static function  getValidateRules($input, $surgeryComplete=false) {
+    public static function getValidateRules($input, $surgeryComplete=false) {
         $rules = array();
 	    $rules['surgerytype_id'] = 'required';
 	    $rules['biometry_left'] = 'numeric';

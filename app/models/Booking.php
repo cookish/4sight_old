@@ -1,12 +1,20 @@
 <?php
 
-class Appointment extends Eloquent {
+class Booking extends Eloquent {
 
-    public function appointmenttype() {
-        return $this->belongsTo('Appointmenttype');
+    public function booking_type() {
+        return $this->belongsTo('BookingType');
     }
 
-    public function person() {
+	public function surgery() {
+		return $this->belongsTo('Surgery');
+	}
+
+	public function theatre() {
+		return $this->belongsTo('Theatre');
+	}
+
+	public function person() {
         return $this->belongsTo('Person');
     }
 

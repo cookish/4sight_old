@@ -11,24 +11,23 @@ class CreateAppointments extends Migration {
      */
     public function up()
     {
-        Schema::create('appointmenttypes', function($table) {
+
+	    Schema::create('booking_types', function($table) {
+		    $table->increments('id');
+		    $table->string('name', 64);
+	    });
+
+        Schema::create('bookings', function($table) {
             // auto incremental id (PK)
             $table->increments('id');
 
-            $table->string('name', 32);
-
-            // created_at | updated_at DATETIME
-            $table->timestamps();
-        });
-
-        Schema::create('appointments', function($table) {
-            // auto incremental id (PK)
-            $table->increments('id');
-
-            $table->integer('appointmenttype_id')->unsigned()->references('id')->on('appointmenttypes');
+	        $table->integer('booking_type_id')->unsigned()->references('id')->on('booking_types');
             $table->integer('person_id')->unsigned()->references('id')->on('people');
-            $table->date('date');
-            $table->string('notes', 512)->nullable();
+	        $table->integer('surgery_id')->unsigned()->references('id')->on('surgeries');
+	        $table->date('date');
+	        $table->string('doctor', 64)->nullable();
+            $table->text('notes')->nullable();
+	        $table->boolean('concluded')->default(false);
 
             // created_at | updated_at DATETIME
             $table->timestamps();
@@ -43,8 +42,8 @@ class CreateAppointments extends Migration {
      */
     public function down()
     {
-        Schema::drop('appointments');
-        Schema::drop('appointmenttypes');
+        Schema::drop('bookings');
+	    Schema::drop('bookings_types');
     }
 
 }
